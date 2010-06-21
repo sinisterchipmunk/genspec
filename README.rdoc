@@ -35,6 +35,35 @@ A basic generator spec might look something like this:
     end
   end
   
+=== Specifying Arguments and Options
+
+You may have noticed in the example above that we used _with_args_ to set up arguments passed into the generator. We
+can also use _with_options_ to set up runtime options. For instance, to pretend the _--verbose_ option was passed, we
+could use the following spec:
+
+  describe :custom_controller do
+    context "with --verbose option" do
+      with_options :verbose => true
+      
+      # . . .
+    end
+  end
+  
+Here is another example using _with_args_:
+
+  describe :custom_controller do
+    context "with a users controller and index, new, edit actions" do
+      with_options :users, :index, :new, :edit
+      
+      # . . .
+    end
+  end
+
+Note that no matter what you specify as arguments, they'll be converted to an array of Strings -- because this is what
+gets passed into the generator if you run it from the command line. The options are expected to be a hash, which is
+how Rails generators read their options from the command line.
+
+
 === Checking for Output
 
 If you need to test the generator's feedback rather than the generator's results, you can use the _output_ matcher to
