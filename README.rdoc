@@ -53,7 +53,7 @@ Here is another example using _with_args_:
 
   describe :custom_controller do
     context "with a users controller and index, new, edit actions" do
-      with_options :users, :index, :new, :edit
+      with_args :users, :index, :new, :edit
       
       # . . .
     end
