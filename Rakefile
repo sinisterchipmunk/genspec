@@ -12,6 +12,7 @@ begin
     gem.authors = ["Colin MacKenzie IV"]
     gem.files = FileList['**/*']
     gem.add_dependency "rspec"
+    gem.add_dependency "sc-core-ext", ">= 1.2.0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
