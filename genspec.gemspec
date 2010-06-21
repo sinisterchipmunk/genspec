@@ -5,12 +5,12 @@
 
 Gem::Specification.new do |s|
   s.name = %q{genspec}
-  s.version = "0.0.0"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Colin MacKenzie IV"]
   s.date = %q{2010-06-21}
-  s.description = %q{longer description of your gem}
+  s.description = %q{Just like rspec-rails uses the structure of your spec/ directory to infer which test is being run (controllers, helpers, lib, etc.), you just need to create a spec/generators directory and put your generator specs in there.}
   s.email = %q{sinisterchipmunk@gmail.com}
   s.extra_rdoc_files = [
     "LICENSE",
@@ -28,17 +28,35 @@ Gem::Specification.new do |s|
      "lib/genspec/generation_matchers/result_matcher.rb",
      "lib/genspec/generator_example_group.rb",
      "pkg/genspec-0.0.0.gem",
+     "pkg/genspec-0.1.0.gem",
+     "rdoc/classes/GenSpec.html",
+     "rdoc/classes/GenSpec/GenerationMatchers.html",
+     "rdoc/classes/GenSpec/GenerationMatchers/GenerationMatcher.html",
+     "rdoc/classes/GenSpec/GenerationMatchers/ResultMatcher.html",
+     "rdoc/classes/GenSpec/GeneratorExampleGroup.html",
+     "rdoc/created.rid",
+     "rdoc/files/README_rdoc.html",
+     "rdoc/files/lib/genspec/generation_matchers/generation_matcher_rb.html",
+     "rdoc/files/lib/genspec/generation_matchers/result_matcher_rb.html",
+     "rdoc/files/lib/genspec/generation_matchers_rb.html",
+     "rdoc/files/lib/genspec/generator_example_group_rb.html",
+     "rdoc/files/lib/genspec_rb.html",
+     "rdoc/fr_class_index.html",
+     "rdoc/fr_file_index.html",
+     "rdoc/fr_method_index.html",
+     "rdoc/index.html",
+     "rdoc/rdoc-style.css",
      "spec/environment_spec.rb",
      "spec/generators/test_spec.rb",
      "spec/spec_helper.rb",
      "spec/support/generators/test/templates/file",
      "spec/support/generators/test/test_generator.rb"
   ]
-  s.homepage = %q{http://github.com/sinisterchipmunk/genspec}
+  s.homepage = %q{http://www.thoughtsincomputation.com}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.6}
-  s.summary = %q{one-line summary of your gem}
+  s.summary = %q{Simple, expressive Rails generator testing for RSpec.}
   s.test_files = [
     "spec/environment_spec.rb",
      "spec/generators/test_spec.rb",
@@ -51,9 +69,12 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
+      s.add_runtime_dependency(%q<rspec>, [">= 0"])
     else
+      s.add_dependency(%q<rspec>, [">= 0"])
     end
   else
+    s.add_dependency(%q<rspec>, [">= 0"])
   end
 end
 
