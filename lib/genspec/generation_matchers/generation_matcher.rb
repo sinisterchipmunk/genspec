@@ -23,7 +23,9 @@ module GenSpec
           @log = target.message
         else
           temporary_root(target) do
-            replay(target)
+            swap_loggers(target) do
+              replay(target)
+            end
           end
         end
         match_content
@@ -62,13 +64,6 @@ module GenSpec
       def temporary_root(target)
         # We could bear to split this into two methods, one called #suspend_logging or some such.
         original_root = target.instance_variable_get("@destination_root")
-        original_logger = Rails::Generator::Base.logger
-        original_quiet = target.logger.quiet
-        @log = ""
-  
-        ### WHY does this not work? Instead we are forced to reroute the log output rather than just silence it.
-        target.logger.quiet = true
-        Rails::Generator::Base.logger = Rails::Generator::SimpleLogger.new(StringIO.new(@log))
   
         Dir.mktmpdir do |dir|
           # need to copy a few files for some methods, ie route_resources
@@ -77,6 +72,18 @@ module GenSpec
           target.instance_variable_set("@destination_root", dir)
           yield
         end
+      ensure
+        target.instance_variable_set("@destination_root", original_root)
+      end
+      
+      def swap_loggers(target)
+        @log = ""
+        original_logger = Rails::Generator::Base.logger
+        original_quiet = target.logger.quiet
+        target.logger.quiet = true
+        Rails::Generator::Base.logger = Rails::Generator::SimpleLogger.new(StringIO.new(@log))
+        
+        yield
       rescue
         if original_logger != Rails::Generator::Base.logger
           Kernel::raise $!.class, "#{$!.message}\n#{@log}", $!.backtrace
@@ -86,7 +93,10 @@ module GenSpec
       ensure
         Rails::Generator::Base.logger = original_logger
         target.logger.quiet = original_quiet
-        target.instance_variable_set("@destination_root", original_root)
+        line = "Generator '#{target.spec.name}'"
+        line << " with args #{target.args.inspect}" unless target.args.empty?
+        Rails.logger.debug line
+        Rails.logger.debug @log
       end
       
       def match_content

@@ -1,7 +1,112 @@
 = genspec
 
-Description goes here.
+Simple, expressive Rails generator testing for RSpec.
 
+== Installation
+
+  sudo gem install genspec
+
+...then, in your config/environments/test.rb...
+
+  config.gem 'genspec'
+  
+== Usage
+
+Just like rspec-rails uses the structure of your spec/ directory to infer which test is being run (controllers,
+helpers, lib, etc.), you just need to create a spec/generators directory and put your generator specs in there.
+A basic generator spec might look something like this:
+
+  # in spec/generators/custom_controller_spec.rb
+  require 'spec_helper'
+  
+  describe :custom_controller do
+    context "with no arguments or options" do
+      it "should generate a help message" do
+        subject.should output("A Help Message")
+      end
+    end
+    
+    context "with a name argument" do
+      with_args :users
+      
+      it "should generate a UsersController" do
+        subject.should generate("app/controllers/users_controller.rb")
+      end
+    end
+  end
+  
+=== Checking for Output
+
+If you need to test the generator's feedback rather than the generator's results, you can use the _output_ matcher to
+assert that your generator has produced some specific content in its output (which would be either a logger of some
+sort or $stdout). This is helpful for making sure your help message is accurate, for instance.
+
+  # Ex 1: String
+  it "should generate a help message" do
+    subject.should output("A Help Message")
+  end
+  
+  # Ex 2: Regular Expression
+  it "should generate a help message" do
+    subject.should output(/A [hH]elp Message/)
+  end
+
+
+=== Checking Generated Files
+
+This is the preferred way to test which files were actually generated, because this matcher checks your
+generator's *behavior*. That means it won't care _how_ a file is generated, as long as it _is_ generated. It's as simple
+as passing the name of the file you expected to be generated:
+
+  it "should generate a readme file" do
+    subject.should generate("README")
+  end
+  
+You can also check the generated file's content by simply passing a block. The argument in the block is the plaintext
+content of the file:
+
+  it "should generate a model called 'user'" do
+    subject.should generate("app/models/user.rb") { |content|
+      content.should =~ /class User < ActiveRecord\:\:Base/
+    }
+  end
+
+=== Checking Generation Methods
+
+This is the most intrusive form of generation matching, and should be avoided where possible. However, in some cases
+you just can't check behavior directly (migrations are a case in point, because the version number is unpredictable).
+In that case, you can verify that a particular method is called within the generator's manifest like so:
+
+  it "should generate a user migration template" do
+    subject.should generate(:migration_template, "migration_template.erb", "db/migrate", :migration_file => "create_users")
+  end
+  
+You can stop passing arguments at any time. This has the effect of widening the range of acceptable parameters. For
+instance, the following example does the same thing but will accept _any_ migration file name in _any_ destination
+directory, as long as the "migration_template.erb" file is used for the source:
+
+  it "should generate a migration template" do
+    subject.should generate(:migration_template, "migration_template.rb")
+  end
+
+Any method that is normally available to Rails generators can be tested in this way:
+
+  it "should test one of each generation type" do
+    subject.should generate(:directory, "db/migrate")
+    subject.should generate(:file, "input_file", "output_file")
+    subject.should generate(:template, "input_template", "output_template")
+    subject.should generate(:class_collisions, 'ActionController::Base')
+    subject.should generate(:migration_template, "file", "directory", :migration_file_name => "filename")
+    subject.should generate(:resource_routes, 'model_name')
+    subject.should generate(:readme, "README")
+  end
+  
+But again... Use these as last resorts, for the most part. Technically, you will probably need this for
+:migration_template and :resource_routes, but anything else should really be tested for _behavior_. Like any other
+class, you should really only care about how the generator interacts with other objects -- in this case, your file
+system -- and not so much about what it's doing on the inside.
+
+  
 == Note on Patches/Pull Requests
  
 * Fork the project.
