@@ -8,7 +8,12 @@ if defined?(RAILS_ROOT)
   end
 end
 
-require 'rspec/core'
+begin
+  require 'rspec/core'
+rescue LoadError
+  raise "GenSpec requires RSpec v2.0."
+end
+
 require 'fileutils'
 
 require 'sc-core-ext'

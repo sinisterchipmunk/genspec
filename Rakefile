@@ -42,7 +42,7 @@ begin
     gem.homepage = "http://www.thoughtsincomputation.com"
     gem.authors = ["Colin MacKenzie IV"]
     gem.files = FileList['**/*']
-    gem.add_dependency "rspec", ">= 2.0"
+    gem.add_dependency "rspec", ">= 2.0.0.beta.14"
     gem.add_dependency "sc-core-ext", ">= 1.2.1"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
