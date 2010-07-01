@@ -10,6 +10,9 @@ Simple, expressive Rails generator testing for RSpec.
 
   config.gem 'genspec'
   
+Warning: This is for Rails 2. For Rails 3, see the rails-3 branch at
+http://github.com/sinisterchipmunk/genspec/tree/rails-3
+  
 == Usage
 
 Just like rspec-rails uses the structure of your spec/ directory to infer which test is being run (controllers,
