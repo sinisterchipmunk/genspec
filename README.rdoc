@@ -1,14 +1,16 @@
 = genspec
 
-Simple, expressive Rails generator testing for RSpec.
+Simple, expressive Rails 3 generator testing for RSpec. For the Rails 2.3 version, use genspec 0.1.x.
 
 == Installation
 
   sudo gem install genspec
 
-...then, in your config/environments/test.rb...
+...then, in your Gemfile...
 
-  config.gem 'genspec'
+  group :test do
+    config.gem 'genspec'
+  end
   
 == Usage
 
@@ -35,15 +37,15 @@ A basic generator spec might look something like this:
     end
   end
   
-=== Specifying Arguments and Options
+=== Specifying Arguments
 
 You may have noticed in the example above that we used _with_args_ to set up arguments passed into the generator. We
-can also use _with_options_ to set up runtime options. For instance, to pretend the _--verbose_ option was passed, we
+can also pass any options we wish into that array. For instance, to pretend the _--verbose_ option was passed, we
 could use the following spec:
 
   describe :custom_controller do
     context "with --verbose option" do
-      with_options :verbose => true
+      with_args "--verbose"
       
       # . . .
     end
@@ -60,9 +62,23 @@ Here is another example using _with_args_:
   end
 
 Note that no matter what you specify as arguments, they'll be converted to an array of Strings -- because this is what
-gets passed into the generator if you run it from the command line. The options are expected to be a hash, which is
-how Rails generators read their options from the command line.
+gets passed into the generator if you run it from the command line. You can bypass that by passing an :object => true
+option as the last argument:
 
+  describe :custom_controller do
+    with_args MyFancyObject.new, :object => true
+    # . . .
+  end
+
+Finally, you can also let with_args generate a context for you:
+
+  describe :custom_controller do
+    with_args :users, :index, :new, :edit do
+      # . . .
+    end
+  end
+  
+This will generate an RSpec context that reads something like, "...with arguments [:users, :index, :new, :edit]".
 
 === Checking for Output
 
@@ -91,8 +107,8 @@ as passing the name of the file you expected to be generated:
     subject.should generate("README")
   end
   
-You can also check the generated file's content by simply passing a block. The argument in the block is the plaintext
-content of the file:
+You can also check the generated file's content by simply passing a block. The _content_ argument in the block is
+a simple String containing the content of the file:
 
   it "should generate a model called 'user'" do
     subject.should generate("app/models/user.rb") { |content|
@@ -102,40 +118,40 @@ content of the file:
 
 === Checking Generation Methods
 
-This is the most intrusive form of generation matching, and should be avoided where possible. However, in some cases
-you just can't check behavior directly (migrations are a case in point, because the version number is unpredictable).
-In that case, you can verify that a particular method is called within the generator's manifest like so:
+This is the most intrusive form of generation matching. While powerful, it will also make your tests brittle, because
+there's a high likelihood that even minor changes to your generators will require you to update the spec to match.
 
-  it "should generate a user migration template" do
-    subject.should generate(:migration_template, "migration_template.erb", "db/migrate", :migration_file => "create_users")
+However, sometimes you need to verify that some action occurs which can't be validated using the methods above, such
+as adding a gem source to the Gemfile. You can use the generation method matcher for this.
+
+  it "should add a gem source" do
+    subject.should generate(:add_source, "http://gems.github.com")
   end
   
+  # -or-
+  it "should add a gem source" do
+    subject.should call_action(:add_source, "http://gems.github.com")
+  end
+
+  # -or-
+  it "should add a gem source" do
+    subject.should add_source("http://gems.github.com")
+  end
+  
+Note that all three of the above examples accomplish exactly the same task. Use whichever is most expressive for you.
+
 You can stop passing arguments at any time. This has the effect of widening the range of acceptable parameters. For
-instance, the following example does the same thing but will accept _any_ migration file name in _any_ destination
-directory, as long as the "migration_template.erb" file is used for the source:
+instance, the following example does the same thing but will accept _any_ source URL, as long as the _add_source_
+action is called:
 
-  it "should generate a migration template" do
-    subject.should generate(:migration_template, "migration_template.rb")
+  it "should add a gem source" do
+    subject.should generate(:add_source)
   end
 
-Any method that is normally available to Rails generators can be tested in this way:
+Any method added to Thor, the backend code that drives Rails generators, should be picked up automatically by
+GenSpec.
 
-  it "should test one of each generation type" do
-    subject.should generate(:directory, "db/migrate")
-    subject.should generate(:file, "input_file", "output_file")
-    subject.should generate(:template, "input_template", "output_template")
-    subject.should generate(:class_collisions, 'ActionController::Base')
-    subject.should generate(:migration_template, "file", "directory", :migration_file_name => "filename")
-    subject.should generate(:resource_routes, 'model_name')
-    subject.should generate(:readme, "README")
-  end
-  
-But again... Use these as last resorts, for the most part. Technically, you will probably need this for
-:migration_template and :resource_routes, but anything else should really be tested for _behavior_. Like any other
-class, you should really only care about how the generator interacts with other objects -- in this case, your file
-system -- and not so much about what it's doing on the inside.
 
-  
 == Note on Patches/Pull Requests
  
 * Fork the project.
