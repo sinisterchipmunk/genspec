@@ -4,13 +4,16 @@ Simple, expressive Rails 3 generator testing for RSpec. For the Rails 2.3 versio
 
 == Installation
 
-  sudo gem install genspec
+  sudo gem install genspec --pre
 
 ...then, in your Gemfile...
 
   group :test do
     config.gem 'genspec'
   end
+  
+Warning: The prerelease version is for Rails 3.0 and is NOT compatible with 2.x! See the master branch
+for the Rails 2.3 version.
   
 == Usage
 
