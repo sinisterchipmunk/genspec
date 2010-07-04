@@ -1,5 +1,5 @@
 class GenSpec::Matchers::GenerationMethodMatcher < GenSpec::Matchers::Base
-  GENERATION_CLASSES = [ 'Thor::Actions', 'Rails::Generators::Actions' ]
+  GENERATION_CLASSES = [ 'Thor::Actions', 'Rails::Generators::Actions', 'Rails::Generators::Migration' ]
   
   attr_reader :method_name, :method_args
   

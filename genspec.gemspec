@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
   s.authors = ["Colin MacKenzie IV"]
-  s.date = %q{2010-07-01}
+  s.date = %q{2010-07-03}
   s.description = %q{Simple, expressive Rails 3 generator testing for RSpec. For the Rails 2.3 version, use genspec 0.1.x.}
   s.email = %q{sinisterchipmunk@gmail.com}
   s.extra_rdoc_files = [
@@ -32,7 +32,6 @@ Gem::Specification.new do |s|
      "lib/genspec/matchers/result_matcher.rb",
      "lib/genspec/shell.rb",
      "pkg/genspec-0.1.1.gem",
-     "pkg/genspec-0.2.0.pre1.gem",
      "pkg/genspec-0.2.0.prerails3.1.gem",
      "spec/environment_spec.rb",
      "spec/generators/test_rails3_spec.rb",

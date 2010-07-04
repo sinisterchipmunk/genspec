@@ -19,7 +19,7 @@ module GenSpec
       unless matcher = GenSpec::Matchers::GenerationMethodMatcher.for_method(kind, *args, &block)
         raise "Could not find a matcher for '#{kind.inspect}'!\n\n" \
               "If this is a custom action, try adding the Thor Action module to GenSpec:\n\n" \
-              "GenSpec::Matchers::GenerationMethodMatcher.GENERATION_CLASSES << 'My::Actions'"
+              "GenSpec::Matchers::GenerationMethodMatcher::GENERATION_CLASSES << 'My::Actions'"
       end
       matcher
     end
