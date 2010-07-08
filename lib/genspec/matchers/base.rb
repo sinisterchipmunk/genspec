@@ -116,7 +116,7 @@ module GenSpec
             def invoke_with_genspec_error_handler(*names, &block)
               invoke_without_genspec_error_handler(*names, &block)
             rescue Thor::Error => err
-              interceptor.error = err
+              self.class.interceptor.error = err
               raise err
             end
             
