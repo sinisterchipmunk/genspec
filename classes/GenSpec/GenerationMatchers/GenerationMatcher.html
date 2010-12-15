@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: GenSpec::GenerationMatchers::GenerationMatcher</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">GenSpec::GenerationMatchers::GenerationMatcher</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../../files/lib/genspec/generation_matchers/generation_matcher_rb.html">
+                lib/genspec/generation_matchers/generation_matcher.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                Object
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000013">after_replay</a>&nbsp;&nbsp;
+      <a href="#M000010">failure_message</a>&nbsp;&nbsp;
+      <a href="#M000008">generation_methods</a>&nbsp;&nbsp;
+      <a href="#M000014">matched!</a>&nbsp;&nbsp;
+      <a href="#M000015">matched?</a>&nbsp;&nbsp;
+      <a href="#M000009">matches?</a>&nbsp;&nbsp;
+      <a href="#M000011">negative_failure_message</a>&nbsp;&nbsp;
+      <a href="#M000007">new</a>&nbsp;&nbsp;
+      <a href="#M000012">replay</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000008" class="method-detail">
+        <a name="M000008"></a>
+
+        <div class="method-heading">
+          <a href="#M000008" class="method-signature">
+          <span class="method-name">generation_methods</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000008-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000008-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/genspec/generation_matchers/generation_matcher.rb, line 13</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">generation_methods</span>
+        <span class="ruby-ivar">@generation_methods</span> <span class="ruby-operator">||=</span> <span class="ruby-node">%w(dependency class_collisions file template complex_template directory readme
+                                   migration_template route_resources)</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000007" class="method-detail">
+        <a name="M000007"></a>
+
+        <div class="method-heading">
+          <a href="#M000007" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">(kind = nil, *args)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000007-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000007-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/genspec/generation_matchers/generation_matcher.rb, line 6</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">kind</span> = <span class="ruby-keyword kw">nil</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+        <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;Call with kind&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">kind</span>
+        <span class="ruby-ivar">@kind</span> = <span class="ruby-identifier">kind</span>.<span class="ruby-identifier">to_s</span>
+        <span class="ruby-ivar">@args</span> = <span class="ruby-identifier">args</span>
+        <span class="ruby-ivar">@but_found</span> = <span class="ruby-keyword kw">nil</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000010" class="method-detail">
+        <a name="M000010"></a>
+
+        <div class="method-heading">
+          <a href="#M000010" class="method-signature">
+          <span class="method-name">failure_message</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000010-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000010-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/genspec/generation_matchers/generation_matcher.rb, line 35</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">failure_message</span>
+        <span class="ruby-node">&quot;Expected to generate #{@kind}#{with_file}#{but_found}&quot;</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000009" class="method-detail">
+        <a name="M000009"></a>
+
+        <div class="method-heading">
+          <a href="#M000009" class="method-signature">
+          <span class="method-name">matches?</span><span class="method-args">(target)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000009-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000009-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/genspec/generation_matchers/generation_matcher.rb, line 18</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">matches?</span>(<span class="ruby-identifier">target</span>)
+        <span class="ruby-comment cmt"># if it's a string then it's an error message or some such from the generator.</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">target</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">Rails</span><span class="ruby-operator">::</span><span class="ruby-constant">Generator</span><span class="ruby-operator">::</span><span class="ruby-constant">GeneratorError</span>)
+          <span class="ruby-comment cmt"># if we're not checking output then why hold on to it? Raise it like the error it is!</span>
+          <span class="ruby-identifier">raise</span> <span class="ruby-identifier">target</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@kind</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'output'</span>
+          <span class="ruby-ivar">@log</span> = <span class="ruby-identifier">target</span>.<span class="ruby-identifier">message</span>
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-identifier">temporary_root</span>(<span class="ruby-identifier">target</span>) <span class="ruby-keyword kw">do</span>
+            <span class="ruby-identifier">swap_loggers</span>(<span class="ruby-identifier">target</span>) <span class="ruby-keyword kw">do</span>
+              <span class="ruby-identifier">replay</span>(<span class="ruby-identifier">target</span>)
+            <span class="ruby-keyword kw">end</span>
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">end</span>
+        <span class="ruby-identifier">match_content</span>
+        <span class="ruby-identifier">matched?</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000011" class="method-detail">
+        <a name="M000011"></a>
+
+        <div class="method-heading">
+          <a href="#M000011" class="method-signature">
+          <span class="method-name">negative_failure_message</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000011-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000011-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/genspec/generation_matchers/generation_matcher.rb, line 39</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">negative_failure_message</span>
+        <span class="ruby-node">&quot;Expected not to generate #{@kind}#{with_file}&quot;</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Protected Instance methods</h3>
+
+      <div id="method-M000013" class="method-detail">
+        <a name="M000013"></a>
+
+        <div class="method-heading">
+          <a href="#M000013" class="method-signature">
+          <span class="method-name">after_replay</span><span class="method-args">(target)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+hook
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000013-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000013-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/genspec/generation_matchers/generation_matcher.rb, line 52</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">after_replay</span>(<span class="ruby-identifier">target</span>)
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000014" class="method-detail">
+        <a name="M000014"></a>
+
+        <div class="method-heading">
+          <a href="#M000014" class="method-signature">
+          <span class="method-name">matched!</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000014-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000014-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/genspec/generation_matchers/generation_matcher.rb, line 55</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">matched!</span>
+        <span class="ruby-ivar">@matched</span> = <span class="ruby-keyword kw">true</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000015" class="method-detail">
+        <a name="M000015"></a>
+
+        <div class="method-heading">
+          <a href="#M000015" class="method-signature">
+          <span class="method-name">matched?</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000015-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000015-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/genspec/generation_matchers/generation_matcher.rb, line 59</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">matched?</span>
+        <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-ivar">@matched</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000012" class="method-detail">
+        <a name="M000012"></a>
+
+        <div class="method-heading">
+          <a href="#M000012" class="method-signature">
+          <span class="method-name">replay</span><span class="method-args">(target)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000012-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000012-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/genspec/generation_matchers/generation_matcher.rb, line 45</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">replay</span>(<span class="ruby-identifier">target</span>)
+        <span class="ruby-ivar">@create</span> = <span class="ruby-constant">Rails</span><span class="ruby-operator">::</span><span class="ruby-constant">Generator</span><span class="ruby-operator">::</span><span class="ruby-constant">Commands</span><span class="ruby-operator">::</span><span class="ruby-constant">Create</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">target</span>)
+        <span class="ruby-identifier">target</span>.<span class="ruby-identifier">manifest</span>.<span class="ruby-identifier">replay</span>(<span class="ruby-keyword kw">self</span>)
+        <span class="ruby-identifier">after_replay</span>(<span class="ruby-identifier">target</span>)
+      <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

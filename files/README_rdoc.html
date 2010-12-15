@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>File: README.rdoc</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+  <div id="fileHeader">
+    <h1>README.rdoc</h1>
+    <table class="header-table">
+    <tr class="top-aligned-row">
+      <td><strong>Path:</strong></td>
+      <td>README.rdoc
+      </td>
+    </tr>
+    <tr class="top-aligned-row">
+      <td><strong>Last Update:</strong></td>
+      <td>Wed Dec 15 08:52:27 -0500 2010</td>
+    </tr>
+    </table>
+  </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <h1>genspec</h1>
+<p>
+Simple, expressive Rails generator testing for RSpec.
+</p>
+<h2>Installation</h2>
+<pre>
+  sudo gem install genspec
+</pre>
+<p>
+&#8230;then, in your config/environments/test.rb&#8230;
+</p>
+<pre>
+  config.gem 'genspec'
+</pre>
+<p>
+Warning: This is for Rails 2. For Rails 3, see the rails-3 branch at <a
+href="http://github.com/sinisterchipmunk/genspec/tree/rails-3">github.com/sinisterchipmunk/genspec/tree/rails-3</a>
+</p>
+<h2>Usage</h2>
+<p>
+Just like rspec-rails uses the structure of your spec/ directory to infer
+which test is being run (controllers, helpers, lib, etc.), you just need to
+create a spec/generators directory and put your generator specs in there. A
+basic generator spec might look something like this:
+</p>
+<pre>
+  # in spec/generators/custom_controller_spec.rb
+  require 'spec_helper'
+
+  describe :custom_controller do
+    context &quot;with no arguments or options&quot; do
+      it &quot;should generate a help message&quot; do
+        subject.should output(&quot;A Help Message&quot;)
+      end
+    end
+
+    context &quot;with a name argument&quot; do
+      with_args :users
+
+      it &quot;should generate a UsersController&quot; do
+        subject.should generate(&quot;app/controllers/users_controller.rb&quot;)
+      end
+    end
+  end
+</pre>
+<h3>Specifying Arguments and Options</h3>
+<p>
+You may have noticed in the example above that we used <em>with_args</em>
+to set up arguments passed into the generator. We can also use
+<em>with_options</em> to set up runtime options. For instance, to pretend
+the _&#8212;verbose_ option was passed, we could use the following spec:
+</p>
+<pre>
+  describe :custom_controller do
+    context &quot;with --verbose option&quot; do
+      with_options :verbose =&gt; true
+
+      # . . .
+    end
+  end
+</pre>
+<p>
+Here is another example using <em>with_args</em>:
+</p>
+<pre>
+  describe :custom_controller do
+    context &quot;with a users controller and index, new, edit actions&quot; do
+      with_args :users, :index, :new, :edit
+
+      # . . .
+    end
+  end
+</pre>
+<p>
+Note that no matter what you specify as arguments, they&#8216;ll be
+converted to an array of Strings &#8212; because this is what gets passed
+into the generator if you run it from the command line. The options are
+expected to be a hash, which is how Rails generators read their options
+from the command line.
+</p>
+<h3>Checking for Output</h3>
+<p>
+If you need to test the generator&#8216;s feedback rather than the
+generator&#8216;s results, you can use the <em>output</em> matcher to
+assert that your generator has produced some specific content in its output
+(which would be either a logger of some sort or $stdout). This is helpful
+for making sure your help message is accurate, for instance.
+</p>
+<pre>
+  # Ex 1: String
+  it &quot;should generate a help message&quot; do
+    subject.should output(&quot;A Help Message&quot;)
+  end
+
+  # Ex 2: Regular Expression
+  it &quot;should generate a help message&quot; do
+    subject.should output(/A [hH]elp Message/)
+  end
+</pre>
+<h3>Checking Generated Files</h3>
+<p>
+This is the preferred way to test which files were actually generated,
+because this matcher checks your generator&#8216;s <b>behavior</b>. That
+means it won&#8216;t care <em>how</em> a file is generated, as long as it
+<em>is</em> generated. It&#8216;s as simple as passing the name of the file
+you expected to be generated:
+</p>
+<pre>
+  it &quot;should generate a readme file&quot; do
+    subject.should generate(&quot;README&quot;)
+  end
+</pre>
+<p>
+You can also check the generated file&#8216;s content by simply passing a
+block. The argument in the block is the plaintext content of the file:
+</p>
+<pre>
+  it &quot;should generate a model called 'user'&quot; do
+    subject.should generate(&quot;app/models/user.rb&quot;) { |content|
+      content.should =~ /class User &lt; ActiveRecord\:\:Base/
+    }
+  end
+</pre>
+<h3>Checking Generation Methods</h3>
+<p>
+This is the most intrusive form of generation matching, and should be
+avoided where possible. However, in some cases you just can&#8216;t check
+behavior directly (migrations are a case in point, because the version
+number is unpredictable). In that case, you can verify that a particular
+method is called within the generator&#8216;s manifest like so:
+</p>
+<pre>
+  it &quot;should generate a user migration template&quot; do
+    subject.should generate(:migration_template, &quot;migration_template.erb&quot;, &quot;db/migrate&quot;, :migration_file =&gt; &quot;create_users&quot;)
+  end
+</pre>
+<p>
+You can stop passing arguments at any time. This has the effect of widening
+the range of acceptable parameters. For instance, the following example
+does the same thing but will accept <em>any</em> migration file name in
+<em>any</em> destination directory, as long as the
+&quot;migration_template.erb&quot; file is used for the source:
+</p>
+<pre>
+  it &quot;should generate a migration template&quot; do
+    subject.should generate(:migration_template, &quot;migration_template.rb&quot;)
+  end
+</pre>
+<p>
+Any method that is normally available to Rails generators can be tested in
+this way:
+</p>
+<pre>
+  it &quot;should test one of each generation type&quot; do
+    subject.should generate(:directory, &quot;db/migrate&quot;)
+    subject.should generate(:file, &quot;input_file&quot;, &quot;output_file&quot;)
+    subject.should generate(:template, &quot;input_template&quot;, &quot;output_template&quot;)
+    subject.should generate(:class_collisions, 'ActionController::Base')
+    subject.should generate(:migration_template, &quot;file&quot;, &quot;directory&quot;, :migration_file_name =&gt; &quot;filename&quot;)
+    subject.should generate(:resource_routes, 'model_name')
+    subject.should generate(:readme, &quot;README&quot;)
+  end
+</pre>
+<p>
+But again&#8230; Use these as last resorts, for the most part. Technically,
+you will probably need this for :migration_template and :resource_routes,
+but anything else should really be tested for <em>behavior</em>. Like any
+other class, you should really only care about how the generator interacts
+with other objects &#8212; in this case, your file system &#8212; and not
+so much about what it&#8216;s doing on the inside.
+</p>
+<h2>Note on Patches/Pull Requests</h2>
+<ul>
+<li>Fork the project.
+
+</li>
+<li>Make your feature addition or bug fix.
+
+</li>
+<li>Add tests for it. This is important so I don&#8216;t break it in a future
+version unintentionally.
+
+</li>
+<li>Commit, do not mess with rakefile, version, or history. (if you want to
+have your own version, that is fine but bump version in a commit by itself
+I can ignore when I pull)
+
+</li>
+<li>Send me a pull request. Bonus points for topic branches.
+
+</li>
+</ul>
+<h2>Copyright</h2>
+<p>
+Copyright (c) 2010 Colin MacKenzie IV. See LICENSE for details.
+</p>
+
+    </div>
+
+
+   </div>
+
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>
