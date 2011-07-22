@@ -2,7 +2,7 @@ module GenSpec
   module Matchers
     class OutputMatcher < GenSpec::Matchers::Base
       def output
-        Thor::Base.shell.output.string
+        shell.output.string
       end
       
       def initialize(text_or_regexp)

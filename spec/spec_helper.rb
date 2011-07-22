@@ -2,10 +2,18 @@
 # ./support/generators/**/*_generator.rb and
 # ./support/rails/generators/**/*_generator.rb
 $LOAD_PATH.push File.join(File.dirname(__FILE__), "support")
-require File.join(File.dirname(__FILE__),"../../../config/environment")
-require File.join(File.dirname(__FILE__),"../lib/gen_spec")
 
-if Rails::VERSION::MAJOR < 3
-  Rails::Generator::Base.append_sources Rails::Generator::PathSource.new(:test,
-          File.expand_path("../support/generators", __FILE__))
+require 'bundler'
+Bundler.setup
+
+if ENV['RAILS']
+  require 'rails'
+  require 'rails/generators'
+end  
+
+if !defined?(Rails)
+  require 'thor/group'
+  require File.expand_path('support/generators/test_rails3/test_rails3_generator', File.dirname(__FILE__))
 end
+
+require File.join(File.dirname(__FILE__),"../lib/gen_spec")

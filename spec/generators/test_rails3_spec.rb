@@ -43,17 +43,19 @@ describe :test_rails3 do
     # Rails-specific actions are also working. If they are, it's safe to say custom extensions
     # will work fine too.
     it 'should add_source "http://gems.github.com/"' do
-      subject.should add_source("http://gems.github.com/")
+      if defined?(Rails)
+        subject.should add_source("http://gems.github.com/")
+      end
     end
   end
   
   with_args '--help' do
     it "should output usage banner with string" do
-      subject.should output("rails generate test_rails3 [ARGUMENT1] [options]")
+      subject.should output(" test_rails3 [ARGUMENT1]")
     end
     
     it "should output usage banner with regexp" do
-      subject.should output(/rails generate test_rails3/)
+      subject.should output(/ test_rails3 /)
     end
   end
   

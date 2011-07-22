@@ -18,11 +18,16 @@ module GenSpec
       def matches?(generator)
         @described = generator[:described]
         @args = generator[:args]
+        @shell = GenSpec::Shell.new
         
-        if @described.kind_of?(Array)
-          @generator = Rails::Generators.find_by_namespace(*@described)
+        if @described.kind_of?(Class)
+          @generator = @described
         else
-          @generator = Rails::Generators.find_by_namespace(@described)
+          if defined?(Rails)
+            @generator = Rails::Generators.find_by_namespace(@described)
+          else
+            @generator = Thor::Util.find_by_namespace(@described)
+          end
         end
         
         raise "Could not find generator: #{@described.inspect}" unless @generator
@@ -73,26 +78,15 @@ module GenSpec
         end
       end
       
+      def shell
+        @shell
+      end
+      
       protected
       # Causes errors not to be raised if a generator fails. Useful for testing output,
       # rather than results.
       def silence_errors!
         @errors_silenced = true
-      end
-      
-      def silence_thor!
-        @generator.instance_eval do
-          alias thor_method_added method_added
-
-          # to silence callbacks and errors about reserved keywords
-          def method_added(meth)
-          end
-        end
-        
-        yield
-        
-        # un-silence errors and callbacks
-        @generator.instance_eval { alias thor_method_added method_added }
       end
       
       private
@@ -104,22 +98,30 @@ module GenSpec
       def invoke
         temporary_root do |tempdir|
           @destination_root = tempdir
-          @generator.start(@args || [], {:destination_root => destination_root})
+          stdout, stderr, stdin = $stdout, $stderr, $stdin
+          $stdout, $stderr, $stdin = shell.output, shell.output, shell.input
+
+          @generator.start(@args || [], {
+            :shell => @shell,
+            :destination_root => destination_root
+          })
+
+          $stdout, $stderr, $stdin = stdout, stderr, stdin
           check_for_errors
           generated
         end
       end
       
       def inject_error_handlers!
-        silence_thor! do
-          @generator.class_eval do
+        @generator.class_eval do
+          no_tasks do
             def invoke_with_genspec_error_handler(*names, &block)
               invoke_without_genspec_error_handler(*names, &block)
             rescue Thor::Error => err
               self.class.interceptor.error = err
               raise err
             end
-            
+          
             alias invoke_without_genspec_error_handler invoke
             alias invoke invoke_with_genspec_error_handler
           end
@@ -128,14 +130,14 @@ module GenSpec
       
       def localize_generator!
         # subclass the generator in question so that aliasing its methods doesn't
-        # impact the root generator (which would be a Bad Thing for other specs)
+        # impact the root generator
         gen = @generator
         generator = Class.new(gen)
+        
         # we have to force the name in order to avoid nil errors within Thor.
-        generator.instance_eval "def self.name; #{gen.name.inspect}; end"
+        generator.instance_eval "def self.namespace; #{gen.namespace.inspect}; end"
         @generator = generator
 
-        
         # add self as the "interceptor" so that our generator's wrapper methods can
         # gain access to this object.
         def @generator.interceptor; @interceptor; end

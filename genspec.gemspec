@@ -4,75 +4,28 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{genspec}
-  s.version = "0.2.0.prerails3.2"
+  s.name = 'genspec'
+  s.version = "0.2.0"
 
-  s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
   s.authors = ["Colin MacKenzie IV"]
-  s.date = %q{2010-07-08}
+  s.date = '2010-07-08'
   s.description = %q{Simple, expressive Rails 3 generator testing for RSpec. For the Rails 2.3 version, use genspec 0.1.x.}
-  s.email = %q{sinisterchipmunk@gmail.com}
+  s.email = 'sinisterchipmunk@gmail.com'
   s.extra_rdoc_files = [
     "LICENSE",
-     "README.rdoc"
+    "README.rdoc"
   ]
-  s.files = [
-    "LICENSE",
-     "README.rdoc",
-     "Rakefile",
-     "VERSION",
-     "genspec.gemspec",
-     "lib/gen_spec.rb",
-     "lib/genspec.rb",
-     "lib/genspec/generator_example_group.rb",
-     "lib/genspec/matchers.rb",
-     "lib/genspec/matchers/base.rb",
-     "lib/genspec/matchers/generation_method_matcher.rb",
-     "lib/genspec/matchers/output_matcher.rb",
-     "lib/genspec/matchers/result_matcher.rb",
-     "lib/genspec/shell.rb",
-     "pkg/genspec-0.1.1.gem",
-     "pkg/genspec-0.2.0.prerails3.1.gem",
-     "pkg/genspec-0.2.0.prerails3.2.gem",
-     "spec/environment_spec.rb",
-     "spec/generators/migration_spec.rb",
-     "spec/generators/test_rails3_spec.rb",
-     "spec/rcov.opts",
-     "spec/rspec.opts",
-     "spec/spec_helper.rb",
-     "spec/support/generators/my_migration/my_migration_generator.rb",
-     "spec/support/generators/test_rails3/USAGE",
-     "spec/support/generators/test_rails3/templates/file",
-     "spec/support/generators/test_rails3/test_rails3_generator.rb"
-  ]
+  s.files = `git ls-files`.split(/\n/)
   s.homepage = %q{http://www.thoughtsincomputation.com}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{Simple, expressive Rails 3 generator testing for RSpec. For the Rails 2.3 version, use genspec 0.1.x.}
-  s.test_files = [
-    "spec/environment_spec.rb",
-     "spec/generators/migration_spec.rb",
-     "spec/generators/test_rails3_spec.rb",
-     "spec/spec_helper.rb",
-     "spec/support/generators/my_migration/my_migration_generator.rb",
-     "spec/support/generators/test_rails3/test_rails3_generator.rb"
-  ]
+  s.test_files = Dir["spec/**/*"]
 
-  if s.respond_to? :specification_version then
-    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
-    s.specification_version = 3
-
-    if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<rspec>, [">= 2.0.0.beta.14"])
-      s.add_runtime_dependency(%q<sc-core-ext>, [">= 1.2.1"])
-    else
-      s.add_dependency(%q<rspec>, [">= 2.0.0.beta.14"])
-      s.add_dependency(%q<sc-core-ext>, [">= 1.2.1"])
-    end
-  else
-    s.add_dependency(%q<rspec>, [">= 2.0.0.beta.14"])
-    s.add_dependency(%q<sc-core-ext>, [">= 1.2.1"])
-  end
+  s.add_dependency 'thor', '~> 0.14.6'
+  s.add_dependency 'rspec', "~> 2.6.0"
+  s.add_dependency 'sc-core-ext', "~> 1.2.1"
+  s.add_dependency 'i18n', '~> 0.5.0'
 end
 

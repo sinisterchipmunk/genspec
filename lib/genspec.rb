@@ -1,6 +1,8 @@
-if defined?(RAILS_ROOT)
+require 'thor'
+
+if defined?(Rails)
   if Rails::VERSION::MAJOR == 2
-    raise "Use genspec 0.1.0 for Rails 2; this version is for Rails 3."
+    raise "Use genspec 0.1.x for Rails 2; this version is for Rails 3."
   elsif Rails::VERSION::MAJOR == 3
     require 'rails/generators'
   else
@@ -20,8 +22,6 @@ require 'sc-core-ext'
 require 'genspec/shell'
 require 'genspec/matchers'
 require 'genspec/generator_example_group'
-
-Thor::Base.shell = GenSpec::Shell.new
 
 # RSpec 2.0 compat
 RSpec.configure do |config|

@@ -1,4 +1,8 @@
-class TestRails3Generator < Rails::Generators::Base
+base = defined?(Rails) ? Rails::Generators::Base : Thor::Group
+
+class TestRails3 < base
+  include Thor::Actions
+  
   def self.source_root
     File.expand_path('../templates', __FILE__)
   end
@@ -18,6 +22,8 @@ class TestRails3Generator < Rails::Generators::Base
   end
   
   def gen_gem_source
-    add_source "http://gems.github.com/"
+    if defined?(Rails)
+      add_source "http://gems.github.com/"
+    end
   end
 end

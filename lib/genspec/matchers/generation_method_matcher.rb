@@ -46,8 +46,8 @@ class GenSpec::Matchers::GenerationMethodMatcher < GenSpec::Matchers::Base
   
   protected
   def invoking
-    silence_thor! do
-      generator.class_eval <<-end_code
+    generator.class_eval <<-end_code
+      no_tasks do
         def #{method_name}_with_intercept(*argus, &block)
           expected_args = self.class.interceptor.method_args
           if expected_args.length > 0
@@ -64,16 +64,20 @@ class GenSpec::Matchers::GenerationMethodMatcher < GenSpec::Matchers::Base
 
           #{method_name}_without_intercept(*argus, &block)
         end
-      end_code
-      generator.send(:alias_method_chain, method_name, :intercept)
-    end    
+
+        alias_method_chain :#{method_name}, :intercept
+      end
+    end_code
   end
   
   public
   class << self
     def generation_methods
       GENERATION_CLASSES.inject([]) do |arr, mod|
-        mod = mod.constantize if mod.kind_of?(String)
+        if mod.kind_of?(String)
+          next arr if !defined?(Rails) && mod =~ /^Rails/
+          mod = mod.constantize
+        end
         arr.concat mod.public_instance_methods.collect { |i| i.to_s }.reject { |i| i =~ /=/ }
         arr
       end
