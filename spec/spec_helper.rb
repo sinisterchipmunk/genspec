@@ -14,6 +14,7 @@ end
 if !defined?(Rails)
   require 'thor/group'
   require File.expand_path('support/generators/test_rails3/test_rails3_generator', File.dirname(__FILE__))
+  require File.expand_path('support/generators/question/question_generator', File.dirname(__FILE__))
 end
 
 require File.join(File.dirname(__FILE__),"../lib/gen_spec")

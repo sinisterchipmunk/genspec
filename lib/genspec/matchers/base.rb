@@ -18,7 +18,7 @@ module GenSpec
       def matches?(generator)
         @described = generator[:described]
         @args = generator[:args]
-        @shell = GenSpec::Shell.new
+        @shell = GenSpec::Shell.new("", generator[:input] || "")
         
         if @described.kind_of?(Class)
           @generator = @described

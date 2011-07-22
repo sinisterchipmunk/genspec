@@ -10,6 +10,16 @@ module GenSpec
     alias_method :output, :stdout
     alias_method :output=, :stdout=
     
+    def ask(statement, color = nil)
+      say "#{statement} ", color
+      response = stdin.gets
+      if response
+        response.strip
+      else
+        raise "Asked '#{statement}', but input.gets returned nil!"
+      end
+    end
+    
     def initialize(output = "", input = "")
       super()
       new(output, input)
