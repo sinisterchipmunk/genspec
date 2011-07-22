@@ -100,6 +100,29 @@ sort or $stdout). This is helpful for making sure your help message is accurate,
   end
 
 
+=== Preparing Input
+
+Sometimes your generator needs to prompt for input. For instance, maybe it's encountered a file that is about
+to be overwritten and needs to check whether the user really wants to do that. You can prepare input streams
+like so:
+
+  with_input "y\n" do
+    it "should do something" do
+      # . . .
+    end
+  end
+  
+  with_input <<-end_input do
+    y
+    n
+    a
+  end_input
+    it "should do a particular set of somethings" do
+      # . . .
+    end
+  end
+
+
 === Checking Generated Files
 
 This is the preferred way to test which files were actually generated, because this matcher checks your
