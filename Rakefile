@@ -2,7 +2,7 @@ require 'rubygems'
 require 'bundler/gem_tasks'
 
 def run(*args)
-  exit $?.to_i unless system *args
+  raise "tests failed" unless system *args
 end
 
 task :default do
@@ -13,7 +13,8 @@ end
 
 require 'rake/rdoctask'
 Rake::RDocTask.new do |rdoc|
-  version = File.exist?('VERSION') ? File.read('VERSION') : ""
+  require File.expand_path("lib/genspec/version", File.dirname(__FILE__))
+  version = GenSpec::VERSION
 
   rdoc.rdoc_dir = 'rdoc'
   rdoc.title = "genspec #{version}"

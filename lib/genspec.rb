@@ -1,5 +1,4 @@
 require 'thor'
-
 if defined?(Rails)
   if Rails::VERSION::MAJOR == 2
     raise "Use genspec 0.1.x for Rails 2; this version is for Rails 3."
@@ -19,6 +18,7 @@ end
 require 'fileutils'
 
 require 'sc-core-ext'
+require 'genspec/version'
 require 'genspec/shell'
 require 'genspec/matchers'
 require 'genspec/generator_example_group'
