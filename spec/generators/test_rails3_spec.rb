@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe :test_rails3 do
+  within_source_root do
+    FileUtils.touch "Gemfile"
+  end
+  
   context "with no options or arguments" do
     it "should generate a file called default_file" do
       subject.should     generate("default_file")

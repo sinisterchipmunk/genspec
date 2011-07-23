@@ -1,10 +1,13 @@
 module GenSpec
   module Matchers
     class Base
-      attr_reader :block, :generator, :args, :described
-      delegate :source_root, :to => :generator
+      attr_reader :block, :generator, :args, :described, :init_blocks
       attr_reader :destination_root
       attr_accessor :error
+      
+      def source_root
+        generator.source_root
+      end
       
       def initialize(&block)
         @block = block if block_given?
@@ -19,6 +22,7 @@ module GenSpec
         @described = generator[:described]
         @args = generator[:args]
         @shell = GenSpec::Shell.new("", generator[:input] || "")
+        @init_blocks = generator[:init_blocks]
         
         if @described.kind_of?(Class)
           @generator = @described
@@ -32,11 +36,12 @@ module GenSpec
         
         raise "Could not find generator: #{@described.inspect}" unless @generator
         
-        localize_generator!
         inject_error_handlers!
         invoking
         invoke
         matched?
+      ensure
+        complete
       end
       
       def matched?
@@ -52,23 +57,19 @@ module GenSpec
       end
       
       protected
+      # callback fired after matching process is complete, regardless of success, failure
+      # or error
+      def complete
+      end
+      
       # callback which fires just before a generator has been invoked.
+      # Allows matchers to inject whatever hooks they need into the generator.
       def invoking
       end
       
       # callback which fires just after a generator has run and after error checking has
       # been performed, if applicable.
       def generated
-      end
-      
-      def temporary_root
-        Dir.mktmpdir do |dir|
-          # need to copy a few files for some methods, ie route_resources
-          FileUtils.touch(File.join(dir, "Gemfile"))
-          
-          # all set.
-          yield dir
-        end
       end
       
       def spec_file_contents(filename)
@@ -82,7 +83,6 @@ module GenSpec
         @shell
       end
       
-      protected
       # Causes errors not to be raised if a generator fails. Useful for testing output,
       # rather than results.
       def silence_errors!
@@ -96,29 +96,40 @@ module GenSpec
       end
       
       def invoke
-        temporary_root do |tempdir|
+        Dir.mktmpdir do |tempdir|
+          FileUtils.chdir tempdir do
+            init_blocks.each do |block|
+              block.call(tempdir)
+            end
+          end
+          
           @destination_root = tempdir
           stdout, stderr, stdin = $stdout, $stderr, $stdin
           $stdout, $stderr, $stdin = shell.output, shell.output, shell.input
 
-          @generator.start(@args || [], {
-            :shell => @shell,
-            :destination_root => destination_root
-          })
-
-          $stdout, $stderr, $stdin = stdout, stderr, stdin
+          begin
+            @generator.start(@args || [], {
+              :shell => @shell,
+              :destination_root => destination_root
+            })
+          ensure
+            $stdout, $stderr, $stdin = stdout, stderr, stdin
+          end
+          
           check_for_errors
           generated
         end
       end
       
       def inject_error_handlers!
+        interceptor = self
         @generator.class_eval do
           no_tasks do
             def invoke_with_genspec_error_handler(*names, &block)
               invoke_without_genspec_error_handler(*names, &block)
             rescue Thor::Error => err
-              self.class.interceptor.error = err
+              # self.class.interceptor.error = err
+              interceptor.error = err
               raise err
             end
           
@@ -126,24 +137,6 @@ module GenSpec
             alias invoke invoke_with_genspec_error_handler
           end
         end
-      end
-      
-      def localize_generator!
-        # subclass the generator in question so that aliasing its methods doesn't
-        # impact the root generator
-        gen = @generator
-        generator = Class.new(gen)
-        
-        # we have to force the name in order to avoid nil errors within Thor.
-        generator.instance_eval "def self.namespace; #{gen.namespace.inspect}; end"
-        @generator = generator
-
-        # add self as the "interceptor" so that our generator's wrapper methods can
-        # gain access to this object.
-        def @generator.interceptor; @interceptor; end
-        def @generator.interceptor=(a); @interceptor = a; end
-    
-        @generator.interceptor = self
       end
     end
   end

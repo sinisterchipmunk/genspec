@@ -11,6 +11,12 @@ if ENV['RAILS']
   require 'rails/generators'
 end  
 
+module CustomActions
+  def act_upon(file)
+    say "Acted upon #{file}."
+  end
+end
+
 if !defined?(Rails)
   require 'thor/group'
   require File.expand_path('support/generators/test_rails3/test_rails3_generator', File.dirname(__FILE__))
@@ -18,3 +24,4 @@ if !defined?(Rails)
 end
 
 require File.join(File.dirname(__FILE__),"../lib/gen_spec")
+GenSpec::Matchers::GenerationMethodMatcher::GENERATION_CLASSES << "CustomActions"

@@ -65,6 +65,35 @@ module GenSpec
         end
       end
       
+      # Executes some code within the generator's source root
+      # prior to the generator actually running. Useful for
+      # setting up fixtures.
+      #
+      # Ex:
+      #
+      #   within_source_root do
+      #     touch "Gemfile"
+      #   end
+      #
+      # Optionally, the block may receive a single argument,
+      # which is the full path to the temporary directory
+      # representing the source root:
+      #
+      #   within_source_root do |tempdir|
+      #     # . . .
+      #   end
+      #
+      def within_source_root(&block)
+        metadata[:generator_init_block] = block
+      end
+      
+      def generator_init_blocks
+        result = []
+        result.concat superclass.generator_init_blocks if genspec_subclass?
+        result << metadata[:generator_init_block] if metadata[:generator_init_block]
+        result
+      end
+      
       def generator_args
         return metadata[:generator_args] if metadata[:generator_args]
         
@@ -92,7 +121,8 @@ module GenSpec
         {
           :described => target_generator,
           :args => generator_args,
-          :input => generator_input
+          :input => generator_input,
+          :init_blocks => generator_init_blocks
         }
       end
       
