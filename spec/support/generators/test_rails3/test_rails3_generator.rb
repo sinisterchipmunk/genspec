@@ -24,6 +24,8 @@ class TestRails3 < base
   def gen_gem_source
     if defined?(Rails)
       add_source "http://gems.github.com/"
+    else
+      append_file "Gemfile", 'source "http://gems.github.com/"'
     end
   end
 end

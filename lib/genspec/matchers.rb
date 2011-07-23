@@ -12,7 +12,7 @@ module GenSpec
     #   subject.should generate(:file, ...)
     #   subject.should generate("vendor/plugins/will_paginate/init.rb")
     #
-    def generate(kind, *args, &block)
+    def generate(kind = nil, *args, &block)
       if kind.kind_of?(Symbol)
         # subject.should generate(:file, ...)
         call_action(kind, *args, &block)

@@ -9,10 +9,20 @@ module GenSpec
       end
       
       def generated
-        path = File.join(destination_root, filename)
-        if File.exist?(path)
+        if filename
+          path = File.join(destination_root, filename)
+          if File.exist?(path)
+            match!
+            spec_file_contents(path)
+          end
+        else
+          # there was no error, so in the context of
+          # "should generate", it most certainly
+          # generated.
           match!
-          spec_file_contents(path)
+          if block
+            block.call
+          end
         end
       end
       

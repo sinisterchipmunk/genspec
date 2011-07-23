@@ -5,6 +5,15 @@ describe :test_rails3 do
     FileUtils.touch "Gemfile"
   end
   
+  it "should modify Gemfile" do
+    out = ""
+    subject.should generate {
+      File.read("Gemfile").strip.should_not be_blank
+      out.concat File.read("Gemfile")
+    }
+    out.strip.should == 'source "http://gems.github.com/"'
+  end
+  
   context "with no options or arguments" do
     it "should generate a file called default_file" do
       subject.should     generate("default_file")

@@ -101,23 +101,23 @@ module GenSpec
             init_blocks.each do |block|
               block.call(tempdir)
             end
-          end
           
-          @destination_root = tempdir
-          stdout, stderr, stdin = $stdout, $stderr, $stdin
-          $stdout, $stderr, $stdin = shell.output, shell.output, shell.input
+            @destination_root = tempdir
+            stdout, stderr, stdin = $stdout, $stderr, $stdin
+            $stdout, $stderr, $stdin = shell.output, shell.output, shell.input
 
-          begin
-            @generator.start(@args || [], {
-              :shell => @shell,
-              :destination_root => destination_root
-            })
-          ensure
-            $stdout, $stderr, $stdin = stdout, stderr, stdin
-          end
+            begin
+              @generator.start(@args || [], {
+                :shell => @shell,
+                :destination_root => destination_root
+              })
+            ensure
+              $stdout, $stderr, $stdin = stdout, stderr, stdin
+            end
           
-          check_for_errors
-          generated
+            check_for_errors
+            generated
+          end
         end
       end
       
