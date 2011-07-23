@@ -13,7 +13,6 @@ end
 
 require 'rake/rdoctask'
 Rake::RDocTask.new do |rdoc|
-  require File.expand_path("lib/genspec/version", File.dirname(__FILE__))
   version = GenSpec::VERSION
 
   rdoc.rdoc_dir = 'rdoc'

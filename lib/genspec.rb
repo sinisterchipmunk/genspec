@@ -18,7 +18,7 @@ end
 require 'fileutils'
 
 require 'sc-core-ext'
-require 'genspec/version'
+require 'genspec/version' unless defined?(GenSpec::VERSION)
 require 'genspec/shell'
 require 'genspec/matchers'
 require 'genspec/generator_example_group'
