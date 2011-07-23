@@ -1,14 +1,40 @@
-require 'spec'
+require 'thor'
+if defined?(Rails)
+  if Rails::VERSION::MAJOR == 2
+    raise "Use genspec 0.1.x for Rails 2; this version is for Rails 3."
+  elsif Rails::VERSION::MAJOR == 3
+    require 'rails/generators'
+  else
+    raise "Unsupported Rails version: #{Rails::VERSION::STRING}"
+  end
+end
+
+begin
+  require 'rspec/core'
+rescue LoadError
+  raise "GenSpec requires RSpec v2.0."
+end
+
 require 'fileutils'
 
 require 'sc-core-ext'
-
-require 'genspec/generation_matchers'
+require 'genspec/version'
+require 'genspec/shell'
+require 'genspec/matchers'
 require 'genspec/generator_example_group'
 
-if defined?(RAILS_ROOT)
-  require 'rails_generator'
-  require 'rails_generator/scripts/generate'
+# RSpec 2.0 compat
+RSpec.configure do |config|
+  config.include GenSpec::GeneratorExampleGroup, :example_group => { :file_path => /spec[\/]generators/ }
+  
+  # Kick off the action wrappers.
+  #
+  # This has to be deferred until the specs run so that the
+  # user has a chance to add custom action modules to the 
+  # list.
+  config.before(:each) do
+    if self.class.include?(GenSpec::GeneratorExampleGroup) # if this is a generator spec
+      GenSpec::Matchers.add_shorthand_methods(self.class)
+    end
+  end
 end
-
-Spec::Example::ExampleGroupFactory.register(:generator, GenSpec::GeneratorExampleGroup)

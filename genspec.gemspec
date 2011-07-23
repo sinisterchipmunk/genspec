@@ -4,80 +4,30 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{genspec}
-  s.version = "0.1.1"
+  s.name = 'genspec'
+  s.version = "0.2.0"
 
-  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Colin MacKenzie IV"]
-  s.date = %q{2010-06-21}
-  s.description = %q{Just like rspec-rails uses the structure of your spec/ directory to infer which test is being run (controllers, helpers, lib, etc.), you just need to create a spec/generators directory and put your generator specs in there.}
-  s.email = %q{sinisterchipmunk@gmail.com}
+  s.date = '2010-07-08'
+  s.description = %q{Simple, expressive Rails 3 generator testing for RSpec. For the Rails 2.3 version, use genspec 0.1.x.}
+  s.email = 'sinisterchipmunk@gmail.com'
   s.extra_rdoc_files = [
     "LICENSE",
-     "README.rdoc"
+    "README.rdoc"
   ]
-  s.files = [
-    "LICENSE",
-     "README.rdoc",
-     "Rakefile",
-     "VERSION",
-     "genspec.gemspec",
-     "lib/genspec.rb",
-     "lib/genspec/generation_matchers.rb",
-     "lib/genspec/generation_matchers/generation_matcher.rb",
-     "lib/genspec/generation_matchers/result_matcher.rb",
-     "lib/genspec/generator_example_group.rb",
-     "pkg/genspec-0.0.0.gem",
-     "pkg/genspec-0.1.0.gem",
-     "rdoc/classes/GenSpec.html",
-     "rdoc/classes/GenSpec/GenerationMatchers.html",
-     "rdoc/classes/GenSpec/GenerationMatchers/GenerationMatcher.html",
-     "rdoc/classes/GenSpec/GenerationMatchers/ResultMatcher.html",
-     "rdoc/classes/GenSpec/GeneratorExampleGroup.html",
-     "rdoc/created.rid",
-     "rdoc/files/README_rdoc.html",
-     "rdoc/files/lib/genspec/generation_matchers/generation_matcher_rb.html",
-     "rdoc/files/lib/genspec/generation_matchers/result_matcher_rb.html",
-     "rdoc/files/lib/genspec/generation_matchers_rb.html",
-     "rdoc/files/lib/genspec/generator_example_group_rb.html",
-     "rdoc/files/lib/genspec_rb.html",
-     "rdoc/fr_class_index.html",
-     "rdoc/fr_file_index.html",
-     "rdoc/fr_method_index.html",
-     "rdoc/index.html",
-     "rdoc/rdoc-style.css",
-     "spec/environment_spec.rb",
-     "spec/generators/test_spec.rb",
-     "spec/spec_helper.rb",
-     "spec/support/generators/test/templates/file",
-     "spec/support/generators/test/test_generator.rb"
-  ]
+  s.files = `git ls-files`.split(/\n/)
   s.homepage = %q{http://www.thoughtsincomputation.com}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.6}
-  s.summary = %q{Simple, expressive Rails generator testing for RSpec.}
-  s.test_files = [
-    "spec/environment_spec.rb",
-     "spec/generators/test_spec.rb",
-     "spec/spec_helper.rb",
-     "spec/support/generators/test/test_generator.rb"
-  ]
+  s.rubygems_version = %q{1.3.7}
+  s.summary = %q{Simple, expressive Rails 3 generator testing for RSpec. For the Rails 2.3 version, use genspec 0.1.x.}
+  s.test_files = Dir["spec/**/*"]
 
-  if s.respond_to? :specification_version then
-    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
-    s.specification_version = 3
-
-    if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<rspec>, [">= 0"])
-      s.add_runtime_dependency(%q<sc-core-ext>, [">= 1.2.0"])
-    else
-      s.add_dependency(%q<rspec>, [">= 0"])
-      s.add_dependency(%q<sc-core-ext>, [">= 1.2.0"])
-    end
-  else
-    s.add_dependency(%q<rspec>, [">= 0"])
-    s.add_dependency(%q<sc-core-ext>, [">= 1.2.0"])
-  end
+  s.add_dependency 'thor', '~> 0.14.6'
+  s.add_dependency 'rspec', "~> 2.6.0"
+  s.add_dependency 'sc-core-ext', "~> 1.2.1"
+  s.add_dependency 'i18n', '~> 0.5.0'
+  
+  s.add_development_dependency 'bundler', '= 1.0.15'
 end
 
