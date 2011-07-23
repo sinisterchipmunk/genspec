@@ -14,7 +14,7 @@ In your Gemfile...
 
 Or, the manual way:
 
-  sudo gem install genspec --pre
+  sudo gem install genspec
 
 == Usage
 
