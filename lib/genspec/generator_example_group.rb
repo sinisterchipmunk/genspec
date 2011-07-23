@@ -30,6 +30,7 @@ module GenSpec
       def with_args(*args, &block)
         options = args.extract_options!
         args = args.flatten.collect { |c| c.to_s } unless options[:object]
+        
         if block_given?
           context "with arguments #{args.inspect}" do
             with_args(args, options)
@@ -87,6 +88,9 @@ module GenSpec
         metadata[:generator_init_block] = block
       end
       
+      # Returns an array of all init blocks from the topmost context down to this
+      # one, in that order. These blocks will be executed sequentially prior to
+      # each run of the generator.
       def generator_init_blocks
         result = []
         result.concat superclass.generator_init_blocks if genspec_subclass?
@@ -94,6 +98,11 @@ module GenSpec
         result
       end
       
+      # Returns the generator arguments to be used for this context. If this context doesn't
+      # have any generator arguments, its superclass is checked, and so on until either the
+      # parent isn't a GenSpec or a set of arguments is found. Only the closest argument
+      # set is used; any sets specified above the discovered argument set are
+      # ignored.
       def generator_args
         return metadata[:generator_args] if metadata[:generator_args]
         
@@ -104,6 +113,11 @@ module GenSpec
         end
       end
       
+      # Returns the input stream to be used for this context. If this context doesn't
+      # have an input stream, its superclass is checked, and so on until either the
+      # parent isn't a GenSpec or an input stream is found. Only the closest input
+      # stream is used; any streams specified above the discovered input stream are
+      # ignored.
       def generator_input
         return metadata[:generator_input] if metadata[:generator_input]
         
@@ -117,6 +131,16 @@ module GenSpec
       alias with_arguments      with_args
       alias generator_arguments generator_args
       
+      # A hash containing the following:
+      #
+      #   :described   - the generator to be tested, or the string/symbol representing it
+      #   :args        - any arguments to be used when invoking the generator
+      #   :input       - a string to be used as an input stream, or nil
+      #   :init_blocks - an array of blocks to be invoked prior to running the generator
+      #
+      # This hash represents the +subject+ of the spec and this is the object that will
+      # ultimately be passed into the GenSpec matchers.
+      #
       def generator_descriptor
         {
           :described => target_generator,
@@ -126,6 +150,8 @@ module GenSpec
         }
       end
       
+      # Traverses up the context tree to find the topmost description, which represents
+      # the controller to be tested or the string/symbol representing it.
       def target_generator
         if genspec_subclass?
           superclass.target_generator
@@ -134,6 +160,11 @@ module GenSpec
         end
       end
 
+      # Returns true if this object's superclass is also a GenSpec.
+      #
+      # When a context is created, rspec creates a class inheriting from the context's
+      # parent. Therefore, this method can be used to recurse up to the highest-level
+      # spec that still tests a generator.
       def genspec_subclass?
         superclass.include?(GenSpec::GeneratorExampleGroup)
       end

@@ -1,7 +1,7 @@
 module GenSpec
   module Matchers
     class Base
-      attr_reader :block, :generator, :args, :described, :init_blocks
+      attr_reader :block, :generator, :args, :init_blocks
       attr_reader :destination_root
       attr_accessor :error
       
