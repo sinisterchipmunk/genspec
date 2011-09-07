@@ -128,6 +128,7 @@ module GenSpec
         end
       end
       
+      alias before_generation   within_source_root
       alias with_arguments      with_args
       alias generator_arguments generator_args
       
