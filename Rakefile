@@ -7,11 +7,16 @@ end
 
 task :default do
   run "rspec", "spec"
-  ENV['RAILS'] = '1'
+  ENV['USE_RAILS'] = '1'
   run "rspec", "spec"
 end
 
-require 'rake/rdoctask'
+begin
+  require "rdoc/task"
+rescue LoadError
+  require 'rake/rdoctask'
+end
+
 Rake::RDocTask.new do |rdoc|
   version = GenSpec::VERSION
 

@@ -103,17 +103,10 @@ module GenSpec
             end
           
             @destination_root = tempdir
-            stdout, stderr, stdin = $stdout, $stderr, $stdin
-            $stdout, $stderr, $stdin = shell.output, shell.output, shell.input
-
-            begin
-              @generator.start(@args || [], {
-                :shell => @shell,
-                :destination_root => destination_root
-              })
-            ensure
-              $stdout, $stderr, $stdin = stdout, stderr, stdin
-            end
+            @generator.start(@args || [], {
+              :shell => @shell,
+              :destination_root => destination_root
+            })
           
             check_for_errors
             generated

@@ -11,8 +11,8 @@ class Question < base
   def ask_question
     yn = ask "Are you a GOD?"
     case yn.downcase[0]
-      when ?y then puts "Oh, uh... Good."
-      else puts "You're new around here, aren't you?"
+      when ?y then say "Oh, uh... Good."
+      else say "You're new around here, aren't you?"
     end
   end
 end

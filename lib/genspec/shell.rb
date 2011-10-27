@@ -5,10 +5,18 @@ module GenSpec
   # the specified streams. By default, these are initialized to instances of StringIO.
   class Shell < Thor::Shell::Basic
     attr_accessor :stdin, :stdout, :stderr
-    alias_method :input, :stdin
-    alias_method :input=, :stdin=
-    alias_method :output, :stdout
+    alias_method :input,   :stdin
+    alias_method :input=,  :stdin=
+    alias_method :output,  :stdout
     alias_method :output=, :stdout=
+    
+    Thor::Shell::SHELL_DELEGATED_METHODS.each do |method|
+      eval <<-end_code                            
+        def #{method}(*args, &block)            # def yes?(*args, &block)
+          push_std { super(*args, &block) }     #   push_std { super(*args, &block) }
+        end                                     # end
+      end_code
+    end
     
     def ask(statement, color = nil)
       say "#{statement} ", color
@@ -34,6 +42,14 @@ module GenSpec
     end
 
     private
+    def push_std
+      _stderr, _stdout, _stdin = $stderr, $stdout, $stdin
+      $stderr, $stdout, $stdin =  stderr,  stdout,  stdin
+      yield
+    ensure
+      $stderr, $stdout, $stdin = _stderr, _stdout, _stdin
+    end
+    
     def init_stream(which, value)
       if value.kind_of?(String)
         value = StringIO.new(value)
