@@ -33,7 +33,7 @@ module GenSpec
         
         if block_given?
           context "with arguments #{args.inspect}" do
-            with_args(args, options)
+            with_args(generator_args + args, options)
             instance_eval(&block)
           end
         else

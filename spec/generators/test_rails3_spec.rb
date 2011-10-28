@@ -85,5 +85,16 @@ describe :test_rails3 do
     it "should generate file 'test_arg'" do
       subject.should generate('test_arg')
     end
+    
+    # ...and a test of nested args
+    with_args "template_name" do
+      it "should generate file 'test_arg'" do
+        subject.should generate('test_arg')
+      end
+
+      it "should generate file 'template_name'" do
+        subject.should generate("template_name")
+      end
+    end
   end
 end

@@ -8,6 +8,7 @@ class TestRails3 < base
   end
 
   argument :argument1, :type => :string, :default => "default_file" 
+  argument :template_name, :type => :string, :default => "file_template"
   
   def gen_file_with_arg
     create_file argument1, "content!"
@@ -18,7 +19,7 @@ class TestRails3 < base
   end
   
   def gen_template
-    template 'file', 'file_template'
+    template 'file', template_name
   end
   
   def gen_gem_source
