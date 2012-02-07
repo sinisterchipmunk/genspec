@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.test_files = Dir["spec/**/*"]
 
   s.add_dependency 'thor', '~> 0.14.6'
-  s.add_dependency 'rspec', "~> 2.6.0"
+  s.add_dependency 'rspec', '~> 2'
   s.add_dependency 'sc-core-ext', "~> 1.2.1"
   s.add_dependency 'i18n', '>= 0.5.0'
 end
