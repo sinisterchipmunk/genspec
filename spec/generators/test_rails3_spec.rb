@@ -80,10 +80,28 @@ describe :test_rails3 do
     end
   end
 
-  # FIXME: Uh, how best to write a spec around this? I'm actually trying to test #with_args with a block...
   with_args :test_arg do
     it "should generate file 'test_arg'" do
       subject.should generate('test_arg')
+    end
+    
+    it "should not generate template_name" do
+      # because that option hasn't been given in this context.
+      subject.should_not generate('template_name')
+    end
+    
+    with_generator_options :behavior => :revoke do
+      it "should delete file 'test_arg'" do
+        subject.should generate {
+          File.should_not exist("test_arg")
+        }
+      end
+      
+      # demonstrate use of the `delete` matcher, which is equivalent to
+      # above:
+      it "should destroy file 'test_arg'" do
+        subject.should delete("test_arg")
+      end
     end
     
     # ...and a test of nested args

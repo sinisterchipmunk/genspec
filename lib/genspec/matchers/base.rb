@@ -21,6 +21,7 @@ module GenSpec
       def matches?(generator)
         @described = generator[:described]
         @args = generator[:args]
+        @generator_options = generator[:generator_options]
         @shell = GenSpec::Shell.new("", generator[:input] || "")
         @init_blocks = generator[:init_blocks]
         
@@ -103,11 +104,10 @@ module GenSpec
             end
           
             @destination_root = tempdir
-            @generator.start(@args || [], {
+            @generator.start(@args || [], @generator_options.reverse_merge(
               :shell => @shell,
               :destination_root => destination_root
-            })
-          
+            ))
             check_for_errors
             generated
           end

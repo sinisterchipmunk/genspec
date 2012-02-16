@@ -22,6 +22,22 @@ module GenSpec
       end
     end
     
+    # Makes sure that the generator deletes the named file. This is done by first ensuring that the
+    # file exists in the first place, and then ensuring that it does not exist after the generator
+    # completes its run.
+    #
+    # Example:
+    #   subject.should delete("path/to/file")
+    #
+    def delete(filename)
+      within_source_root do
+        FileUtils.mkdir_p File.dirname(filename)
+        FileUtils.touch   filename
+      end
+      
+      generate { File.should_not exist(filename) }
+    end
+    
     # ex:
     #   subject.should call_action(:create_file, ...)
     #

@@ -199,6 +199,23 @@ Finally, you can also choose to use +with_args+ without a block, in which case i
       # . . .
     end
   end
+  
+  
+=== Passing Options
+
+Sometimes you need to change the behavior of the generator itself, by passing options directly into the generator instance that you couldn't normally pass from the command line. A perfect example is when you want to test what would happen when the generator's behavior is set to :revoke, which is equivalent to the +rails destroy+ command. 
+
+Here's an example that verifies that a file is created by the generator, but that the same file is deleted when the generator's behavior is set to +:revoke+:
+
+  describe :controller do
+    with_args "welcome" do
+      it { should generate("app/controllers/welcome_controller.rb") }
+    
+      with_options :behavior => :revoke do
+        it { should delete("app/controllers/welcome_controller.rb") }
+      end
+    end
+  end
 
 === Fixtures
 

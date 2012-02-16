@@ -5,7 +5,36 @@ module GenSpec
 
     def self.included(base)
       base.send(:extend, GenSpec::GeneratorExampleGroup::ClassMethods)
-      base.send(:subject) { self.class.generator_descriptor }
+      base.send(:subject) { generator_descriptor }
+    end
+    
+    def within_source_root(&block)
+      generator_init_blocks << block
+    end
+    
+    def generator_init_blocks
+      @generator_init_blocks ||= self.class.generator_init_blocks.dup
+    end
+    
+    # A hash containing the following:
+    #
+    #   :described   - the generator to be tested, or the string/symbol representing it
+    #   :args        - any arguments to be used when invoking the generator
+    #   :input       - a string to be used as an input stream, or nil
+    #   :init_blocks - an array of blocks to be invoked prior to running the generator
+    #   :generator_options - a hash of options to be passed into the generator
+    #
+    # This hash represents the +subject+ of the spec and this is the object that will
+    # ultimately be passed into the GenSpec matchers.
+    #
+    def generator_descriptor
+      {
+        :described => self.class.target_generator,
+        :args => self.class.generator_args,
+        :input => self.class.generator_input,
+        :init_blocks => generator_init_blocks,
+        :generator_options => self.class.generator_options
+      }
     end
 
     module ClassMethods
@@ -38,6 +67,27 @@ module GenSpec
           end
         else
           metadata[:generator_args] = args
+        end
+      end
+      
+      # Allows you to pass options directly into the generator, such as
+      # :shell, :behavior, etc.
+      #
+      # Ex:
+      #
+      #   # simulate a destroy generator, per `rails destroy controller ...`
+      #   with_generator_options :behavior => :revoke do
+      #     # . . .
+      #   end
+      #
+      def with_generator_options(options, &block)
+        if block_given?
+          context "with generator options #{options.inspect}" do
+            with_generator_options options
+            instance_eval &block
+          end
+        else
+          generator_options.merge! options
         end
       end
       
@@ -113,6 +163,17 @@ module GenSpec
         end
       end
       
+      # Returns the hash of options to be passed into the generator in this context.
+      def generator_options
+        return metadata[:generator_options] if metadata[:generator_options]
+        
+        metadata[:generator_options] = if genspec_subclass?
+          superclass.generator_options.dup
+        else
+          { }
+        end
+      end
+      
       # Returns the input stream to be used for this context. If this context doesn't
       # have an input stream, its superclass is checked, and so on until either the
       # parent isn't a GenSpec or an input stream is found. Only the closest input
@@ -131,25 +192,6 @@ module GenSpec
       alias before_generation   within_source_root
       alias with_arguments      with_args
       alias generator_arguments generator_args
-      
-      # A hash containing the following:
-      #
-      #   :described   - the generator to be tested, or the string/symbol representing it
-      #   :args        - any arguments to be used when invoking the generator
-      #   :input       - a string to be used as an input stream, or nil
-      #   :init_blocks - an array of blocks to be invoked prior to running the generator
-      #
-      # This hash represents the +subject+ of the spec and this is the object that will
-      # ultimately be passed into the GenSpec matchers.
-      #
-      def generator_descriptor
-        {
-          :described => target_generator,
-          :args => generator_args,
-          :input => generator_input,
-          :init_blocks => generator_init_blocks
-        }
-      end
       
       # Traverses up the context tree to find the topmost description, which represents
       # the controller to be tested or the string/symbol representing it.
