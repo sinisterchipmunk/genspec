@@ -23,5 +23,9 @@ if !defined?(Rails)
   require File.expand_path('support/generators/question/question_generator', File.dirname(__FILE__))
 end
 
+RSpec.configure do |c|
+  c.before { GenSpec.root = File.expand_path('../tmp', File.dirname(__FILE__)) } if RUBY_PLATFORM =~ /java/i
+end
+
 require File.join(File.dirname(__FILE__),"../lib/gen_spec")
 GenSpec::Matchers::GenerationMethodMatcher::GENERATION_CLASSES << "CustomActions"
