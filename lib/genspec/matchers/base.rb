@@ -22,7 +22,7 @@ module GenSpec
         @described = generator[:described]
         @args = generator[:args]
         @generator_options = generator[:generator_options]
-        @shell = GenSpec::Shell.new("", generator[:input] || "")
+        @shell = GenSpec::Shell.new(generator[:output] || "", generator[:input] || "")
         @init_blocks = generator[:init_blocks]
         
         if @described.kind_of?(Class)
@@ -96,18 +96,27 @@ module GenSpec
         raise error if error && !@errors_silenced
       end
       
+      def mktmpdir(&block)
+        tmpdir_args = [ @described.to_s ]
+        if GenSpec.root
+          FileUtils.mkdir_p GenSpec.root
+          tmpdir_args << GenSpec.root
+        end
+        Dir.mktmpdir *tmpdir_args, &block
+      end
+      
       def invoke
-        Dir.mktmpdir do |tempdir|
+        mktmpdir do |tempdir|
           FileUtils.chdir tempdir do
             init_blocks.each do |block|
               block.call(tempdir)
             end
           
             @destination_root = tempdir
-            @generator.start(@args || [], @generator_options.reverse_merge(
+            @generator.start @args || [], @generator_options.reverse_merge(
               :shell => @shell,
               :destination_root => destination_root
-            ))
+            )
             check_for_errors
             generated
           end

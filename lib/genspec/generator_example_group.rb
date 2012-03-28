@@ -29,14 +29,15 @@ module GenSpec
     #
     def generator_descriptor
       {
-        :described => self.class.target_generator,
+        :described => self.class.generator,
         :args => self.class.generator_args,
         :input => self.class.generator_input,
+        :output => self.class.generator_output,
         :init_blocks => generator_init_blocks,
         :generator_options => self.class.generator_options
       }
     end
-
+    
     module ClassMethods
       # Sets the list of arguments for this generator.
       #
@@ -174,6 +175,17 @@ module GenSpec
         end
       end
       
+      # Returns the generator output string or IO, or nil.
+      def generator_output
+        return metadata[:generator_output] if metadata[:generator_output]
+        
+        metadata[:generator_output] = if genspec_subclass?
+          superclass.generator_output
+        else
+          nil
+        end
+      end
+      
       # Returns the input stream to be used for this context. If this context doesn't
       # have an input stream, its superclass is checked, and so on until either the
       # parent isn't a GenSpec or an input stream is found. Only the closest input
@@ -195,9 +207,15 @@ module GenSpec
       
       # Traverses up the context tree to find the topmost description, which represents
       # the controller to be tested or the string/symbol representing it.
-      def target_generator
+      #
+      # If name is specified, it will be used instead and subsequent calls to this method
+      # will return the specified name.
+      def generator(name = nil)
+        metadata[:generator_name] = name.to_s if name
+        return metadata[:generator_name] if metadata[:generator_name]
+        
         if genspec_subclass?
-          superclass.target_generator
+          superclass.generator
         else
           describes || description
         end

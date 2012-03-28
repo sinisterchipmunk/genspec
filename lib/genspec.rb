@@ -17,13 +17,17 @@ end
 
 require 'fileutils'
 
-require 'sc-core-ext'
-require 'genspec/version' unless defined?(GenSpec::VERSION)
-require 'genspec/shell'
-require 'genspec/matchers'
-require 'genspec/generator_example_group'
+module GenSpec
+  def self.root;        @root;        end
+  def self.root=(root); @root = root; end
+  
+  require 'sc-core-ext'
+  require 'genspec/version' unless defined?(GenSpec::VERSION)
+  require 'genspec/shell'
+  require 'genspec/matchers'
+  require 'genspec/generator_example_group'
+end
 
-# RSpec 2.0 compat
 RSpec.configure do |config|
   config.include GenSpec::GeneratorExampleGroup, :example_group => { :file_path => /spec[\/]generators/ }
   

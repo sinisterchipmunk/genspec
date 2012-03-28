@@ -2,7 +2,7 @@ module GenSpec
   class Version
     MAJOR = 0
     MINOR = 2
-    PATCH = 5
+    PATCH = 6
     RELEASE = nil
     
     STRING = (RELEASE ? [MAJOR, MINOR, PATCH, RELEASE] : [MAJOR, MINOR, PATCH]).join('.')
