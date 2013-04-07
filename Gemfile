@@ -1,5 +1,5 @@
-source :gemcutter
+source 'https://rubygems.org'
 
 gemspec
 
-gem 'rails'
+gem 'rails', ENV['RAILS_VERSION'] || '>= 3'
