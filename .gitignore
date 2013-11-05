@@ -21,3 +21,4 @@ rdoc
 pkg
 
 ## PROJECT::SPECIFIC
+Gemfile.lock
