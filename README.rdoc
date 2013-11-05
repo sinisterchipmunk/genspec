@@ -1,4 +1,4 @@
-= GenSpec
+= GenSpec {<img src="https://travis-ci.org/sinisterchipmunk/genspec.png?branch=master" alt="Build Status" />}[https://travis-ci.org/sinisterchipmunk/genspec] {<img src="https://codeclimate.com/github/sinisterchipmunk/genspec.png" />}[https://codeclimate.com/github/sinisterchipmunk/genspec] {<img src="https://coveralls.io/repos/sinisterchipmunk/genspec/badge.png" alt="Coverage Status" />}[https://coveralls.io/r/sinisterchipmunk/genspec]
 
 Simple, expressive generator testing for RSpec. This version of GenSpec supports testing either Thor generators (in standalone applications/gems) or Rails 3 generators for Rails apps.
 
