@@ -40,6 +40,14 @@ A basic generator spec might look something like this:
       end
     end
   end
+
+=== Checking an engine
+
+You may need to specify a base class, particularly if you are testing a Rails engine:
+
+  describe "base_class:custom_controller" do
+    ...
+  end
   
 === Checking Generated Files
 
