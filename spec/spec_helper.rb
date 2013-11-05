@@ -1,5 +1,5 @@
 require 'coveralls'
-Coveralls.wear!
+Coveralls.wear_merged!
 
 # Having ./support in the load path means Rails will load the generators at
 # ./support/generators/**/*_generator.rb and
