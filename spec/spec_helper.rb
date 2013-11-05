@@ -1,3 +1,6 @@
+require 'coveralls'
+Coveralls.wear!
+
 # Having ./support in the load path means Rails will load the generators at
 # ./support/generators/**/*_generator.rb and
 # ./support/rails/generators/**/*_generator.rb

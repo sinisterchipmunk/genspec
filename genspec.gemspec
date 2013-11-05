@@ -25,5 +25,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'thor'
   s.add_dependency 'rspec', '~> 2'
   s.add_dependency 'sc-core-ext', "~> 1.2.1"
+
+  s.add_development_dependency 'coveralls'
 end
 
