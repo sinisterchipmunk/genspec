@@ -20,8 +20,10 @@ require 'fileutils'
 module GenSpec
   def self.root;        @root;        end
   def self.root=(root); @root = root; end
-  
-  require 'sc-core-ext'
+
+  require 'active_support'
+  require "active_support/core_ext/string/inflections"
+  require "active_support/core_ext/hash/reverse_merge"
   require 'genspec/version' unless defined?(GenSpec::VERSION)
   require 'genspec/shell'
   require 'genspec/matchers'

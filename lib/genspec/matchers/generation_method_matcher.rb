@@ -32,8 +32,8 @@ class GenSpec::Matchers::GenerationMethodMatcher < GenSpec::Matchers::Base
   def report_actual_args(args)
     # save a reference to the set of args that most *closely* matched the expectation.
     return(@actual_args = args) if @actual_args.nil?
-    matches = (method_args % args).length
-    if matches > (method_args % @actual_args).length
+    matches = (method_args & args).length
+    if matches > (method_args & @actual_args).length
       @actual_args = args
     end
   end
@@ -85,8 +85,9 @@ class GenSpec::Matchers::GenerationMethodMatcher < GenSpec::Matchers::Base
           
           send(:"#{method_name}_without_intercept", *argus, &block)
         end
-        
-        alias_method_chain :"#{method_name}", :intercept
+
+        alias_method :"#{method_name}_without_intercept", :"#{method_name}"
+        alias_method :"#{method_name}", :"#{method_name}_with_intercept"
       end
     end
   end

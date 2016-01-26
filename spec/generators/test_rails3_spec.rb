@@ -8,7 +8,7 @@ describe :test_rails3 do
   it "should modify Gemfile" do
     out = ""
     subject.should generate {
-      File.read("Gemfile").strip.should_not be_blank
+      File.read("Gemfile").strip.should_not be_empty
       out.concat File.read("Gemfile")
     }
     out.strip.should == 'source "http://gems.github.com/"'
