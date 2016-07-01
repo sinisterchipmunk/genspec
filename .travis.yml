@@ -4,8 +4,6 @@ rvm:
   - 2.2.4
   - 2.3.0
   - ruby-head
-  - jruby-19mode
-  - jruby-head
   - rbx-19mode
 
 env:
@@ -20,9 +18,7 @@ env:
 matrix:
   allow_failures:
     - rvm: ruby-head
-    - rvm: jruby-19mode
     - rvm: rbx-19mode
-    - rvm: jruby-head
   exclude:
     - rvm: 2.3.0
       env: RAILS_VERSION="~> 3.1.0"
