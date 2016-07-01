@@ -10,8 +10,6 @@ Coveralls::RakeTask.new
 
 task :default do
   run "rspec", "spec"
-  ENV['USE_RAILS'] = '1'
-  run "rspec", "spec"
   Rake::Task['coveralls:push'].invoke
 end
 

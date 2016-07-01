@@ -24,7 +24,9 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'thor'
   s.add_dependency 'rspec', '~> 2'
+  s.add_dependency 'activesupport', '>= 3', '<= 5'
 
   s.add_development_dependency 'coveralls'
+  s.add_development_dependency 'rake'
 end
 

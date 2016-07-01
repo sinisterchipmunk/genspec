@@ -9,7 +9,7 @@ $LOAD_PATH.push File.join(File.dirname(__FILE__), "support")
 require 'bundler'
 Bundler.setup
 
-if ENV['USE_RAILS']
+if ENV['RAILS_VERSION'] != 'none'
   require 'rails'
   require 'rails/generators'
 end  

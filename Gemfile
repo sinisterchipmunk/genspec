@@ -2,4 +2,6 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'rails', ENV['RAILS_VERSION'] || '>= 3'
+if ENV['RAILS_VERSION'] != 'none'
+  gem 'rails', ENV['RAILS_VERSION'] || '>= 3'
+end
