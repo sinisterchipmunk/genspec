@@ -10,8 +10,8 @@ describe GenSpec do
     after  { GenSpec.root = nil }
   
     it "should generate files in generation root" do
-      within_source_root { Dir[File.join(GenSpec.root, '**/*')].should_not be_empty }
-      subject.should generate("a_directory")
+      within_source_root { expect(Dir[File.join(GenSpec.root, '**/*')]).not_to be_empty }
+      expect(subject).to generate("a_directory")
     end
   end
 end

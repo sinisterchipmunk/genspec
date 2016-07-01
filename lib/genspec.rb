@@ -11,8 +11,9 @@ end
 
 begin
   require 'rspec/core'
+  require 'rspec/version'
 rescue LoadError
-  raise "GenSpec requires RSpec v2.0."
+  raise "GenSpec requires RSpec v2.0 or newer."
 end
 
 require 'fileutils'
@@ -28,7 +29,13 @@ module GenSpec
 end
 
 RSpec.configure do |config|
-  config.include GenSpec::GeneratorExampleGroup, :example_group => { :file_path => /spec[\/]generators/ }
+  if RSpec::Version::STRING[0] == '2'
+    config.include GenSpec::GeneratorExampleGroup, example_group: { file_path: /spec[\/]generators/ }
+  elsif RSpec::Version::STRING[0] == '3'
+    config.include GenSpec::GeneratorExampleGroup, file_path: /spec[\/]generators/
+  else
+    raise "unexpected rspec version: #{RSpec::Version::STRING}"
+  end
   
   # Kick off the action wrappers.
   #

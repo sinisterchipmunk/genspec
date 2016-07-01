@@ -30,7 +30,7 @@ module GenSpec
         "Expected to generate #{filename}"
       end
         
-      def negative_failure_message
+      def failure_message_when_negated
         "Expected to not generate #{filename}"
       end
     end

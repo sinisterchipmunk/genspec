@@ -19,7 +19,7 @@ module GenSpec
       end
       
       def matches?(generator)
-        @described = generator[:described]
+        @described = generator[:described].to_s
         base = nil
         base, @described = @described.split(/:/) if @described =~ /:/
         @args = generator[:args]

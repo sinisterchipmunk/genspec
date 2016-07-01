@@ -13,7 +13,11 @@ env:
   - RAILS_VERSION="~> 4.1.0"
   - RAILS_VERSION="~> 4.2.0"
   - RAILS_VERSION="~> 5.0.0"
-  - RAILS_VERSION="none"
+  # Do we need to test each rspec version with each rails?
+  # Since rspec has no direct relation to rails (except through rspec-rails,
+  # which isn't considered here), I'm assuming no.
+  - RAILS_VERSION="none"     RSPEC_VERSION="~> 2.0"
+  - RAILS_VERSION="none"     RSPEC_VERSION="~> 3.0"
 
 matrix:
   allow_failures:

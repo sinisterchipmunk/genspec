@@ -25,7 +25,7 @@ module GenSpec
           "expected to match #{@regexp.inspect}, but did not"
       end
 
-      def negative_failure_message
+      def failure_message_when_negated
         output + "\n" \
           "expected not to match #{@regexp.inspect}, but did"
       end

@@ -23,7 +23,11 @@ Gem::Specification.new do |s|
   s.test_files = Dir["spec/**/*"]
 
   s.add_dependency 'thor'
-  s.add_dependency 'rspec', '~> 2'
+  if ENV['RSPEC_VERSION']
+    s.add_dependency 'rspec', ENV['RSPEC_VERSION']
+  else
+    s.add_dependency 'rspec', '>= 2', '< 4'
+  end
 
   s.add_development_dependency 'coveralls'
   s.add_development_dependency 'rake'

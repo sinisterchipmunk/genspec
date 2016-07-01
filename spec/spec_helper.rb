@@ -26,6 +26,10 @@ if !defined?(Rails)
   require File.expand_path('support/generators/question/question_generator', File.dirname(__FILE__))
 end
 
+if RSpec::Expectations.respond_to?(:configuration)
+  RSpec::Expectations.configuration.on_potential_false_positives = :nothing
+end
+
 RSpec.configure do |c|
   c.before { GenSpec.root = File.expand_path('../tmp', File.dirname(__FILE__)) } if RUBY_PLATFORM =~ /java/i
 end

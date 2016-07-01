@@ -217,7 +217,7 @@ module GenSpec
         if genspec_subclass?
           superclass.generator
         else
-          describes || description
+          described_class || description
         end
       end
 
