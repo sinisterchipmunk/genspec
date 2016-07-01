@@ -1,14 +1,20 @@
 rvm:
   - 2.0.0
+  - 2.1.8
+  - 2.2.4
+  - 2.3.0
   - ruby-head
   - jruby-19mode
   - jruby-head
   - rbx-19mode
 
 env:
-  - RAILS_VERSION="~> 3.1"
-  - RAILS_VERSION="~> 3.2"
-  - RAILS_VERSION="~> 4.0"
+  - RAILS_VERSION="~> 3.1.0"
+  - RAILS_VERSION="~> 3.2.0"
+  - RAILS_VERSION="~> 4.0.0"
+  - RAILS_VERSION="~> 4.1.0"
+  - RAILS_VERSION="~> 4.2.0"
+  - RAILS_VERSION="~> 5.0.0"
 
 matrix:
   allow_failures:
@@ -16,3 +22,12 @@ matrix:
     - rvm: jruby-19mode
     - rvm: rbx-19mode
     - rvm: jruby-head
+  exclude:
+    - rvm: 2.3.0
+      env: RAILS_VERSION="~> 3.1.0"
+    - rvm: 2.3.0
+      env: RAILS_VERSION="~> 3.2.0"
+    - rvm: 2.0.0
+      env: RAILS_VERSION="~> 5.0.0"
+    - rvm: 2.1.8
+      env: RAILS_VERSION="~> 5.0.0"

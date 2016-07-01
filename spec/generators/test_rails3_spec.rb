@@ -8,10 +8,10 @@ describe :test_rails3 do
   it "should modify Gemfile" do
     out = ""
     subject.should generate {
-      File.read("Gemfile").strip.should_not be_blank
+      File.read("Gemfile").strip.should_not be_empty
       out.concat File.read("Gemfile")
     }
-    out.strip.should == 'source "http://gems.github.com/"'
+    out.strip.should =~ %r(\Asource ['"]http://gems.github.com/['"]\z)
   end
   
   context "with no options or arguments" do

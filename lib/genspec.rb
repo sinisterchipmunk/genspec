@@ -2,7 +2,7 @@ require 'thor'
 if defined?(Rails)
   if Rails::VERSION::MAJOR == 2
     raise "Use genspec 0.1.x for Rails 2; this version is for Rails 3."
-  elsif [3, 4].include? Rails::VERSION::MAJOR
+  elsif [3, 4, 5].include? Rails::VERSION::MAJOR
     require 'rails/generators'
   else
     raise "Unsupported Rails version: #{Rails::VERSION::STRING}"
@@ -20,8 +20,10 @@ require 'fileutils'
 module GenSpec
   def self.root;        @root;        end
   def self.root=(root); @root = root; end
-  
-  require 'sc-core-ext'
+
+  require 'active_support'
+  require "active_support/core_ext/string/inflections"
+  require "active_support/core_ext/hash/reverse_merge"
   require 'genspec/version' unless defined?(GenSpec::VERSION)
   require 'genspec/shell'
   require 'genspec/matchers'
