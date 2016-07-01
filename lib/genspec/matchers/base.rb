@@ -115,11 +115,9 @@ module GenSpec
             end
           
             @destination_root = tempdir
+            defaults = { :shell => @shell, :destination_root => destination_root }
             with_captured_io do
-              @generator.start @args || [], @generator_options.reverse_merge(
-                :shell => @shell,
-                :destination_root => destination_root
-              )
+              @generator.start @args || [], defaults.merge(@generator_options)
             end
             check_for_errors
             generated

@@ -58,7 +58,7 @@ module GenSpec
       #   end
       #
       def with_args(*args, &block)
-        options = args.extract_options!
+        options = args.last.kind_of?(Hash) ? args.pop : {}
         args = args.flatten.collect { |c| c.to_s } unless options[:object]
         
         if block_given?
