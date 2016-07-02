@@ -1,5 +1,5 @@
 require 'thor'
-if defined?(Rails)
+if defined?(Rails) && defined?(Rails::VERSION)
   if Rails::VERSION::MAJOR == 2
     raise "Use genspec 0.1.x for Rails 2; this version is for Rails 3."
   elsif [3, 4, 5].include? Rails::VERSION::MAJOR
@@ -21,6 +21,10 @@ require 'fileutils'
 module GenSpec
   def self.root;        @root;        end
   def self.root=(root); @root = root; end
+
+  def self.rails?
+    defined?(Rails) && defined?(Rails::VERSION)
+  end
 
   require 'genspec/version' unless defined?(GenSpec::VERSION)
   require 'genspec/shell'

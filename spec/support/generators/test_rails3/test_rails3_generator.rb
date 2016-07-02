@@ -1,4 +1,4 @@
-base = defined?(Rails) ? Rails::Generators::Base : Thor::Group
+base = GenSpec.rails? ? Rails::Generators::Base : Thor::Group
 
 class TestRails3 < base
   include Thor::Actions
@@ -24,7 +24,7 @@ class TestRails3 < base
   
   def gen_gem_source
     if File.file?("Gemfile")
-      if defined?(Rails)
+      if GenSpec.rails?
         add_source "http://gems.github.com/"
       else
         append_file "Gemfile", 'source "http://gems.github.com/"'

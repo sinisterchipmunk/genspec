@@ -1,4 +1,4 @@
-base = defined?(Rails) ? Rails::Generators::Base : Thor::Group
+base = GenSpec.rails? ? Rails::Generators::Base : Thor::Group
 
 class Question < base
   include Thor::Actions

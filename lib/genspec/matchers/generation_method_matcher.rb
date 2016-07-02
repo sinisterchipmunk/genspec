@@ -117,9 +117,9 @@ class GenSpec::Matchers::GenerationMethodMatcher < GenSpec::Matchers::Base
     def generation_methods
       GENERATION_CLASSES.inject([]) do |arr, mod|
         if mod.kind_of?(String)
-          next arr if !defined?(Rails) && mod =~ /^Rails/
+          next arr if !GenSpec.rails? && mod =~ /^Rails/
           mod = mod.split('::').inject(Kernel) do |container, name|
-            container.const_get(name)
+            container && container.const_get(name)
           end
         end
         arr.concat mod.public_instance_methods.collect { |i| i.to_s }.reject { |i| i =~ /=/ }

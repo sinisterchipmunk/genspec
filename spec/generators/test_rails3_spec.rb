@@ -56,7 +56,7 @@ describe :test_rails3 do
     # Rails-specific actions are also working. If they are, it's safe to say custom extensions
     # will work fine too.
     it 'should add_source "http://gems.github.com/"' do
-      if defined?(Rails)
+      if GenSpec.rails?
         expect(subject).to add_source("http://gems.github.com/")
       end
     end

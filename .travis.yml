@@ -18,6 +18,9 @@ env:
   # which isn't considered here), I'm assuming no.
   - RAILS_VERSION="none"     RSPEC_VERSION="~> 2.0"
   - RAILS_VERSION="none"     RSPEC_VERSION="~> 3.0"
+  # don't use rails, but define a module called Rails. This happens if you
+  # pull in ActiveRecord and then require AR's generators.
+  - RAILS_VERSION="none"     DEFINE_RAILS_MODULE=1
 
 matrix:
   allow_failures:

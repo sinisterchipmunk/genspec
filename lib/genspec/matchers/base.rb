@@ -30,7 +30,7 @@ module GenSpec
         if @described.kind_of?(Class)
           @generator = @described
         else
-          if defined?(Rails)
+          if GenSpec.rails?
             @generator = Rails::Generators.find_by_namespace(@described, base)
           else
             @generator = Thor::Util.find_by_namespace(@described)
