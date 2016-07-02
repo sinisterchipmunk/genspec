@@ -7,7 +7,6 @@ Gem::Specification.new do |s|
   s.version = GenSpec::VERSION
 
   s.authors = ["Colin MacKenzie IV"]
-  s.date = '2010-07-08'
   s.description = %q{Simple, expressive Thor and/or Rails 3+ generator testing for RSpec. For the Rails 2.3 version, use genspec 0.1.x.}
   s.email = 'sinisterchipmunk@gmail.com'
   s.extra_rdoc_files = [
