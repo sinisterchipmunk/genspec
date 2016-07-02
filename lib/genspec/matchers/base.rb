@@ -19,7 +19,7 @@ module GenSpec
       end
       
       def matches?(generator)
-        @described = generator[:described].to_s
+        @described = generator[:described]
         base = nil
         base, @described = @described.split(/:/) if @described =~ /:/
         @args = generator[:args]
@@ -31,9 +31,9 @@ module GenSpec
           @generator = @described
         else
           if GenSpec.rails?
-            @generator = Rails::Generators.find_by_namespace(@described, base)
+            @generator = Rails::Generators.find_by_namespace(@described.to_s, base)
           else
-            @generator = Thor::Util.find_by_namespace(@described)
+            @generator = Thor::Util.find_by_namespace(@described.to_s)
           end
         end
         

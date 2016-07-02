@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe :question do
+shared_examples_for 'the question generator' do
   context "without input" do
     it "should raise an error" do
       expect(proc { expect(subject).to output("Are you a GOD?")
@@ -30,4 +30,14 @@ describe :question do
       }).not_to raise_error
     end
   end
+end
+
+# test that we can pass a generator by class, there's no reason this shouldn't
+# be possible
+describe Question do
+  it_should_behave_like 'the question generator'
+end
+
+describe :question do
+  it_should_behave_like 'the question generator'
 end

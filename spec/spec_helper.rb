@@ -27,10 +27,14 @@ module CustomActions
 end
 
 require 'genspec'
+# always load this one, because we'll reference it by class name in specs,
+# so it has to be defined before they load.
+require File.expand_path('support/generators/question/question_generator', File.dirname(__FILE__))
 unless GenSpec.rails?
+  # only load this one when rails isn't around, because rails should autoload
+  # it if rails is in use
   require 'thor/group'
   require File.expand_path('support/generators/test_rails3/test_rails3_generator', File.dirname(__FILE__))
-  require File.expand_path('support/generators/question/question_generator', File.dirname(__FILE__))
 end
 
 if RSpec::Expectations.respond_to?(:configuration)
